@@ -1,0 +1,215 @@
+.app-shell {
+  display: grid;
+  gap: 24px;
+  width: min(1320px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 32px;
+}
+
+.hero-panel,
+.canvas-panel,
+.info-card {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(5, 10, 23, 0.74);
+  box-shadow: 0 24px 80px rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(20px);
+}
+
+.hero-panel {
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 28px;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 12px;
+}
+
+.eyebrow,
+.panel-label,
+.panel-hint,
+.latin-name {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.panel-label {
+  margin: 0;
+  color: #93c5fd;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.hero-panel h1,
+.canvas-panel h2,
+.info-card h2 {
+  margin: 0;
+}
+
+.hero-description,
+.muscle-description {
+  max-width: 64ch;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-tags span,
+.muscle-chip {
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.hero-tags span {
+  padding: 10px 14px;
+  color: #dbeafe;
+  font-size: 0.92rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(320px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.canvas-panel {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 28px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: end;
+}
+
+.panel-hint {
+  margin: 0;
+  color: rgba(191, 219, 254, 0.72);
+  font-size: 0.72rem;
+}
+
+.canvas-stage {
+  height: min(72vh, 820px);
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(96, 165, 250, 0.14);
+}
+
+.canvas-stage canvas {
+  display: block;
+}
+
+.info-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.info-card {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+  border-radius: 24px;
+}
+
+.latin-name {
+  color: rgba(147, 197, 253, 0.8);
+  font-size: 0.74rem;
+}
+
+.muscle-list {
+  display: grid;
+  gap: 10px;
+}
+
+.muscle-chip {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.muscle-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(96, 165, 250, 0.35);
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.muscle-chip.is-active {
+  border-color: rgba(251, 113, 133, 0.8);
+  background: linear-gradient(135deg, rgba(127, 29, 29, 0.75), rgba(30, 41, 59, 0.88));
+}
+
+.muscle-chip span,
+.muscle-chip small {
+  pointer-events: none;
+}
+
+.muscle-chip small {
+  color: rgba(191, 219, 254, 0.76);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.next-steps {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+  color: rgba(226, 232, 240, 0.82);
+}
+
+@media (max-width: 1100px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100% - 20px, 1320px);
+    gap: 16px;
+    padding: 12px 0 20px;
+  }
+
+  .hero-panel,
+  .canvas-panel,
+  .info-card {
+    border-radius: 20px;
+  }
+
+  .hero-panel,
+  .canvas-panel,
+  .info-card {
+    padding: 16px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .canvas-stage {
+    min-height: 420px;
+  }
+}
