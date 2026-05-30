@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
+import './App.css'
 import { AnatomyCanvas } from './components/AnatomyCanvas'
 import { type MuscleId, MUSCLES } from './data/muscles'
-import './App.css'
 
 function App() {
   const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(MUSCLES[0].id)
@@ -13,24 +13,6 @@ function App() {
 
   return (
     <main className="app-shell">
-      <section className="hero-panel">
-        <div className="hero-copy">
-          <p className="eyebrow">Pocket Anatomy / R3F Starter</p>
-          <h1>3D人体をクリックして筋肉名を表示するテンプレート</h1>
-          <p className="hero-description">
-            今は簡易メッシュで筋肉領域を表現しています。あとから glTF の人体モデルに差し替えても、
-            「選択した部位を UI に反映する」流れをそのまま再利用できます。
-          </p>
-        </div>
-
-        <div className="hero-tags" aria-label="tech stack">
-          <span>TypeScript</span>
-          <span>React</span>
-          <span>react-three-fiber</span>
-          <span>three.js</span>
-        </div>
-      </section>
-
       <section className="workspace">
         <div className="canvas-panel">
           <div className="panel-header">
