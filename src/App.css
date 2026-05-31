@@ -102,6 +102,7 @@
 }
 
 .canvas-stage {
+  position: relative;
   height: min(72vh, 820px);
   min-height: 520px;
   overflow: hidden;
@@ -111,6 +112,15 @@
 
 .canvas-stage canvas {
   display: block;
+}
+
+.canvas-stats {
+  position: absolute !important;
+  top: 12px;
+  left: 12px !important;
+  right: auto;
+  z-index: 2;
+  pointer-events: none;
 }
 
 .muscle-marker {

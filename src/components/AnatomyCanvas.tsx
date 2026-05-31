@@ -1,6 +1,6 @@
-import { Html, OrbitControls } from '@react-three/drei'
+import { Html, OrbitControls, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { MUSCLES, type MuscleId } from '../data/muscles'
 import { MuscleModel } from './MuscleModel'
 
@@ -56,13 +56,20 @@ function AnatomyModel({
 }
 
 export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanvasProps) {
+  const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null)
+  const statsParentRef = useMemo(
+    () => (statsParent ? { current: statsParent } : undefined),
+    [statsParent],
+  )
+
   return (
-    <div className="canvas-stage">
+    <div ref={setStatsParent} className="canvas-stage">
       <Canvas
         shadows
         camera={{ position: [0, 1.8, 6.4], fov: 32 }}
         onPointerMissed={() => onSelectMuscle(null)}
       >
+        {statsParentRef ? <Stats parent={statsParentRef} className="canvas-stats" /> : null}
         <color attach="background" args={['#87ceeb']} />
         <fog attach="fog" args={['#87ceeb', 8, 14]} />
         <ambientLight intensity={0.9} />
