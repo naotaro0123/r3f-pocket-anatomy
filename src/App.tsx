@@ -60,15 +60,6 @@ function App() {
               })}
             </div>
           </section>
-
-          <section className="info-card">
-            <p className="panel-label">Next step ideas</p>
-            <ul className="next-steps">
-              <li>人体 glTF を読み込み、筋肉ごとに mesh 名を割り当てる</li>
-              <li>左右・深層/浅層の切り替え UI を追加する</li>
-              <li>筋肉詳細を辞書データや CMS から取得する</li>
-            </ul>
-          </section>
         </aside>
       </section>
     </main>
