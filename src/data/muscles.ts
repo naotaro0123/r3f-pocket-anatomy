@@ -33,7 +33,7 @@ export const MUSCLES: MuscleDefinition[] = [
     latinName: 'Pectoralis major',
     description: '胸郭の前面に広がる筋。肩関節の内転・内旋や押す動きの基礎になります。',
     color: '#f97316',
-    labelPosition: [0, 2.9, 0.95],
+    labelPosition: [0, 3.3, 0.3],
   },
   {
     id: 'biceps-brachii',
@@ -42,7 +42,7 @@ export const MUSCLES: MuscleDefinition[] = [
     latinName: 'Biceps brachii',
     description: '肘関節の屈曲と前腕の回外に関わる、上腕前面の代表的な筋です。',
     color: '#fb7185',
-    labelPosition: [1.5, 2.15, 0.8],
+    labelPosition: [0.6, 3.5, 0.05],
   },
   {
     id: 'rectus-abdominis',
@@ -51,7 +51,7 @@ export const MUSCLES: MuscleDefinition[] = [
     latinName: 'Rectus abdominis',
     description: '体幹前面を支える筋。体幹屈曲や姿勢保持に関与します。',
     color: '#22c55e',
-    labelPosition: [0, 1.6, 0.95],
+    labelPosition: [0, 2.85, 0.3],
   },
   {
     id: 'quadriceps',
@@ -60,7 +60,7 @@ export const MUSCLES: MuscleDefinition[] = [
     latinName: 'Quadriceps femoris',
     description: '膝関節の伸展を担う大腿前面の大きな筋群です。',
     color: '#38bdf8',
-    labelPosition: [0.65, 0.15, 0.85],
+    labelPosition: [0.2, 2.15, 0.2],
   },
 ]
 
