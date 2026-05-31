@@ -18,9 +18,9 @@ function App() {
           <div className="panel-header">
             <div>
               <p className="panel-label">Viewer</p>
-              <h2>Anterior anatomy mock</h2>
+              <h2>Anterior anatomy model</h2>
             </div>
-            <p className="panel-hint">ドラッグで回転 / ホイールでズーム / パーツクリックで選択</p>
+            <p className="panel-hint">ドラッグで回転 / ホイールでズーム / 番号ラベルをクリック</p>
           </div>
 
           <AnatomyCanvas
@@ -36,7 +36,7 @@ function App() {
             <p className="latin-name">{selectedMuscle?.latinName ?? 'No muscle selected'}</p>
             <p className="muscle-description">
               {selectedMuscle?.description ??
-                '3D モデルのパーツをクリックすると、ここに筋肉名と説明を表示します。'}
+                '番号ラベルをクリックすると、ここに筋肉名と説明を表示します。'}
             </p>
           </section>
 
