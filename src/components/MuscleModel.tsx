@@ -1,7 +1,7 @@
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useGraph, type ThreeElements } from '@react-three/fiber'
 import { useMemo, useRef } from 'react'
-import type { Bone, Group, MeshStandardMaterial, SkinnedMesh } from 'three'
+import { FrontSide, type Bone, type Group, type MeshStandardMaterial, type SkinnedMesh } from 'three'
 import { SkeletonUtils, type GLTF } from 'three-stdlib'
 import { MUSCLES, MUSCLE_PARTS } from '../data/muscles'
 
@@ -43,6 +43,18 @@ function HostedMuscleModel(props: MuscleModelProps) {
   const { scene, animations } = useGLTF(MODEL_URL) as GLTF
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
   const { nodes, materials } = useGraph(clone) as unknown as MuscleGraph
+  const optimizedMaterials = useMemo(() => {
+    const jointsMaterial = materials.Alpha_Joints_MAT.clone()
+    const bodyMaterial = materials.Alpha_Body_MAT.clone()
+
+    jointsMaterial.side = FrontSide
+    bodyMaterial.side = FrontSide
+
+    return {
+      Alpha_Joints_MAT: jointsMaterial,
+      Alpha_Body_MAT: bodyMaterial,
+    }
+  }, [materials])
 
   useAnimations(animations, group)
 
@@ -55,7 +67,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Alpha_Joints"
           geometry={nodes.Alpha_Joints.geometry}
-          material={materials.Alpha_Joints_MAT}
+          material={optimizedMaterials.Alpha_Joints_MAT}
           skeleton={nodes.Alpha_Joints.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
@@ -63,7 +75,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Alpha_Surface"
           geometry={nodes.Alpha_Surface.geometry}
-          material={materials.Alpha_Body_MAT}
+          material={optimizedMaterials.Alpha_Body_MAT}
           skeleton={nodes.Alpha_Surface.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}

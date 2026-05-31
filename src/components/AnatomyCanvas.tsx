@@ -31,7 +31,6 @@ function AnatomyModel({
             muscle.labelPosition[2],
           ]}
           center
-          occlude
         >
           <button
             type="button"
@@ -65,6 +64,8 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
   return (
     <div ref={setStatsParent} className="canvas-stage">
       <Canvas
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
         shadows
         camera={{ position: [0, 1.8, 6.4], fov: 32 }}
         onPointerMissed={() => onSelectMuscle(null)}
@@ -77,8 +78,8 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
           castShadow
           intensity={2.8}
           position={[4, 7, 4]}
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
         />
         <pointLight intensity={18} position={[-4, 2, 2]} color="#60a5fa" />
         <pointLight intensity={10} position={[4, 1, -2]} color="#f472b6" />
@@ -89,10 +90,7 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
         </mesh>
 
         <Suspense fallback={null}>
-          <AnatomyModel
-            selectedMuscleId={selectedMuscleId}
-            onSelectMuscle={onSelectMuscle}
-          />
+          <AnatomyModel selectedMuscleId={selectedMuscleId} onSelectMuscle={onSelectMuscle} />
         </Suspense>
 
         <OrbitControls
