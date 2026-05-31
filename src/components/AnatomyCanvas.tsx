@@ -1,6 +1,7 @@
 import { Html, OrbitControls, Stats } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-import { Suspense, useMemo, useState } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { MUSCLES, type MuscleId } from '../data/muscles'
 import { MuscleModel } from './MuscleModel'
 
@@ -10,6 +11,24 @@ type AnatomyCanvasProps = {
 }
 
 const MARKER_Y_OFFSET = 0.18
+const CAMERA_TARGET: [number, number, number] = [0, 1.55, 0]
+
+const CAMERA_PRESETS = {
+  front: {
+    label: 'フロントビュー',
+    position: [0, 1.9, 7.9] as [number, number, number],
+  },
+  side: {
+    label: 'サイドビュー',
+    position: [7.9, 1.9, 0] as [number, number, number],
+  },
+  topRight: {
+    label: 'クォータービュー',
+    position: [6.1, 3.05, 6.1] as [number, number, number],
+  },
+} as const
+
+type CameraPresetKey = keyof typeof CAMERA_PRESETS
 
 function AnatomyModel({
   selectedMuscleId,
@@ -54,7 +73,34 @@ function AnatomyModel({
   )
 }
 
+function CameraPresetController({
+  controlsRef,
+  preset,
+}: {
+  controlsRef: React.RefObject<OrbitControlsImpl | null>
+  preset: CameraPresetKey
+}) {
+  const { camera } = useThree()
+
+  useEffect(() => {
+    const controls = controlsRef.current
+    const { position } = CAMERA_PRESETS[preset]
+
+    camera.position.set(...position)
+    camera.lookAt(...CAMERA_TARGET)
+
+    if (controls) {
+      controls.target.set(...CAMERA_TARGET)
+      controls.update()
+    }
+  }, [camera, controlsRef, preset])
+
+  return null
+}
+
 export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanvasProps) {
+  const controlsRef = useRef<OrbitControlsImpl | null>(null)
+  const [cameraPreset, setCameraPreset] = useState<CameraPresetKey>('front')
   const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null)
   const statsParentRef = useMemo(
     () => (statsParent ? { current: statsParent } : undefined),
@@ -63,11 +109,24 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
 
   return (
     <div ref={setStatsParent} className="canvas-stage">
+      <div className="camera-debug-panel" aria-label="camera presets">
+        {Object.entries(CAMERA_PRESETS).map(([key, preset]) => (
+          <button
+            key={key}
+            type="button"
+            className={`camera-debug-button${cameraPreset === key ? ' is-active' : ''}`}
+            onClick={() => setCameraPreset(key as CameraPresetKey)}
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         shadows
-        camera={{ position: [0, 1.8, 6.4], fov: 32 }}
+        camera={{ position: CAMERA_PRESETS.front.position, fov: 32 }}
         onPointerMissed={() => onSelectMuscle(null)}
       >
         {statsParentRef ? <Stats parent={statsParentRef} className="canvas-stats" /> : null}
@@ -90,16 +149,18 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
         </mesh>
 
         <Suspense fallback={null}>
+          <CameraPresetController controlsRef={controlsRef} preset={cameraPreset} />
           <AnatomyModel selectedMuscleId={selectedMuscleId} onSelectMuscle={onSelectMuscle} />
         </Suspense>
 
         <OrbitControls
+          ref={controlsRef}
           enablePan={false}
           minDistance={4.8}
-          maxDistance={8}
+          maxDistance={10}
           minPolarAngle={Math.PI / 3.2}
           maxPolarAngle={Math.PI / 1.85}
-          target={[0, 1.6, 0]}
+          target={CAMERA_TARGET}
         />
       </Canvas>
     </div>

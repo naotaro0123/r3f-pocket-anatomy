@@ -4,7 +4,7 @@ import { AnatomyCanvas } from './components/AnatomyCanvas'
 import { type MuscleId, MUSCLES } from './data/muscles'
 
 function App() {
-  const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(MUSCLES[0].id)
+  const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(null)
 
   const selectedMuscle = useMemo(
     () => MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null,

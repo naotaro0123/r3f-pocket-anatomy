@@ -123,6 +123,43 @@
   pointer-events: none;
 }
 
+.camera-debug-panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+.camera-debug-button {
+  padding: 8px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
+  color: #e2e8f0;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.camera-debug-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(147, 197, 253, 0.52);
+}
+
+.camera-debug-button.is-active {
+  border-color: rgba(96, 165, 250, 0.72);
+  background: rgba(30, 41, 59, 0.94);
+  color: #eff6ff;
+}
+
 .muscle-marker {
   position: relative;
   display: grid;
