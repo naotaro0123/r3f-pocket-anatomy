@@ -1,6 +1,7 @@
-import { Html, OrbitControls, Stats } from '@react-three/drei'
+import { Billboard, Html, OrbitControls, Stats, Text } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import type { ThreeEvent } from '@react-three/fiber'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { MUSCLES, type MuscleId } from '../data/muscles'
 import { MuscleModel } from './MuscleModel'
@@ -11,6 +12,9 @@ type AnatomyCanvasProps = {
 }
 
 const MARKER_Y_OFFSET = 0.18
+const MARKER_Z_OFFSET = 0.18
+const CALLOUT_X_OFFSET = 0.24
+const CALLOUT_Y_OFFSET = 0.1
 const CAMERA_TARGET: [number, number, number] = [0, 1.55, 0]
 
 const CAMERA_PRESETS = {
@@ -30,6 +34,81 @@ const CAMERA_PRESETS = {
 
 type CameraPresetKey = keyof typeof CAMERA_PRESETS
 
+function MuscleMarker({
+  index,
+  isActive,
+  muscleId,
+  position,
+  onSelectMuscle,
+}: {
+  index: number
+  isActive: boolean
+  muscleId: MuscleId
+  position: [number, number, number]
+  onSelectMuscle: (muscleId: MuscleId) => void
+}) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const handleSelect = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation()
+    onSelectMuscle(muscleId)
+  }
+
+  const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    setIsHovered(true)
+  }
+
+  const handlePointerOut = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    setIsHovered(false)
+  }
+
+  return (
+    <Billboard position={position} follow>
+      <group>
+        <mesh
+          onClick={handleSelect}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+          position={[0, 0, -0.001]}
+        >
+          <ringGeometry args={[0.13, 0.145, 32]} />
+          <meshBasicMaterial
+            color={isActive || isHovered ? '#fb7185' : '#e2e8f0'}
+            opacity={isActive ? 0.92 : isHovered ? 0.78 : 0.58}
+            transparent
+          />
+        </mesh>
+        <mesh
+          onClick={handleSelect}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+        >
+          <circleGeometry args={[0.13, 32]} />
+          <meshBasicMaterial
+            color={isActive ? '#be185d' : isHovered ? '#1e293b' : '#0f172a'}
+            opacity={isActive ? 0.88 : isHovered ? 0.8 : 0.62}
+            transparent
+          />
+        </mesh>
+        <Text
+          position={[0, 0, 0.02]}
+          fontSize={0.12}
+          color="#f8fafc"
+          anchorX="center"
+          anchorY="middle"
+          onClick={handleSelect}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+        >
+          {index + 1}
+        </Text>
+      </group>
+    </Billboard>
+  )
+}
+
 function AnatomyModel({
   selectedMuscleId,
   onSelectMuscle,
@@ -37,38 +116,41 @@ function AnatomyModel({
   selectedMuscleId: MuscleId | null
   onSelectMuscle: (muscleId: MuscleId) => void
 }) {
+  const selectedMuscle = selectedMuscleId
+    ? MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null
+    : null
+
   return (
     <group position={[0, -1.15, 0]}>
       <MuscleModel position={[0, 0.8, 0]} scale={2} />
 
       {MUSCLES.map((muscle, index) => (
-        <Html
+        <MuscleMarker
           key={muscle.id}
+          index={index}
+          isActive={muscle.id === selectedMuscleId}
+          muscleId={muscle.id}
           position={[
             muscle.labelPosition[0],
             muscle.labelPosition[1] + MARKER_Y_OFFSET,
-            muscle.labelPosition[2],
+            muscle.labelPosition[2] + MARKER_Z_OFFSET,
           ]}
-          center
-        >
-          <button
-            type="button"
-            className={`muscle-marker${muscle.id === selectedMuscleId ? ' is-active' : ''}`}
-            onPointerDown={(event) => event.stopPropagation()}
-            onPointerUp={(event) => event.stopPropagation()}
-            onClick={(event) => {
-              event.stopPropagation()
-              onSelectMuscle(muscle.id)
-            }}
-            aria-label={`${index + 1}: ${muscle.name}`}
-          >
-            <span className="muscle-marker__index">{index + 1}</span>
-            {muscle.id === selectedMuscleId ? (
-              <span className="muscle-marker__callout">{muscle.name}</span>
-            ) : null}
-          </button>
-        </Html>
+          onSelectMuscle={onSelectMuscle}
+        />
       ))}
+
+      {selectedMuscle ? (
+        <Html
+          position={[
+            selectedMuscle.labelPosition[0] + CALLOUT_X_OFFSET,
+            selectedMuscle.labelPosition[1] + MARKER_Y_OFFSET + CALLOUT_Y_OFFSET,
+            selectedMuscle.labelPosition[2] + MARKER_Z_OFFSET,
+          ]}
+          style={{ pointerEvents: 'none' }}
+        >
+          <div className="muscle-callout">{selectedMuscle.name}</div>
+        </Html>
+      ) : null}
     </group>
   )
 }
