@@ -11,10 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-public/models/*.glb
-public/models/*.gltf
-public/models/*.fbx
-!public/models/.gitkeep
+public/models/*
 
 # Editor directories and files
 .vscode/*
