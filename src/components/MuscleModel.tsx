@@ -1,11 +1,13 @@
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useGraph, type ThreeElements } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { FrontSide, type Bone, type Group, type MeshStandardMaterial, type SkinnedMesh } from 'three'
 import { SkeletonUtils, type GLTF } from 'three-stdlib'
-import { MUSCLES, MUSCLE_PARTS } from '../data/muscles'
+import { MUSCLES, MUSCLE_PARTS, type MuscleId } from '../data/muscles'
 
-type MuscleModelProps = ThreeElements['group']
+type MuscleModelProps = ThreeElements['group'] & {
+  selectedMuscleId?: MuscleId | null
+}
 type RotationTuple = [number, number, number]
 type GLTFResult = GLTF & {
   nodes: {
@@ -33,6 +35,7 @@ const MODEL_ROTATION: RotationTuple = [
 ]
 const MODEL_SCALE = toNumber(import.meta.env.VITE_MUSCLE_MODEL_SCALE, 0.01)
 const MUSCLE_COLOR_BY_ID = new Map(MUSCLES.map((muscle) => [muscle.id, muscle.color]))
+const HIGHLIGHT_COLOR = '#fb7185'
 
 function toNumber(value: string | undefined, fallback: number) {
   const parsed = Number(value)
@@ -43,7 +46,24 @@ function toRadians(value: string | undefined, fallbackDegrees: number) {
   return (toNumber(value, fallbackDegrees) * Math.PI) / 180
 }
 
-function HostedMuscleModel(props: MuscleModelProps) {
+function createMuscleMaterial(
+  baseMaterial: MeshStandardMaterial,
+  muscleId: MuscleId,
+  selectedMuscleId: MuscleId | null | undefined,
+) {
+  const material = baseMaterial.clone()
+  const isSelected = muscleId === selectedMuscleId
+
+  material.side = FrontSide
+  material.transparent = false
+  material.opacity = 1
+  material.emissive.set(isSelected ? HIGHLIGHT_COLOR : '#000000')
+  material.emissiveIntensity = isSelected ? 0.85 : 0
+
+  return material
+}
+
+function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
   const group = useRef<Group>(null)
   const { scene, animations } = useGLTF(MODEL_URL) as GLTF
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene])
@@ -54,12 +74,28 @@ function HostedMuscleModel(props: MuscleModelProps) {
 
     jointsMaterial.side = FrontSide
     bodyMaterial.side = FrontSide
+    bodyMaterial.transparent = false
+    bodyMaterial.opacity = 1
 
     return {
       Alpha_Joints_MAT: jointsMaterial,
       Alpha_Body_MAT: bodyMaterial,
+      muscles: {
+        Muscle_Chest: createMuscleMaterial(materials.Alpha_Body_MAT, 'Muscle_Chest', selectedMuscleId),
+        Muscle_Biceps: createMuscleMaterial(materials.Alpha_Body_MAT, 'Muscle_Biceps', selectedMuscleId),
+        Muscle_Abs: createMuscleMaterial(materials.Alpha_Body_MAT, 'Muscle_Abs', selectedMuscleId),
+        Muscle_Quads: createMuscleMaterial(materials.Alpha_Body_MAT, 'Muscle_Quads', selectedMuscleId),
+      },
     }
-  }, [materials])
+  }, [materials, selectedMuscleId])
+
+  useEffect(() => {
+    return () => {
+      optimizedMaterials.Alpha_Joints_MAT.dispose()
+      optimizedMaterials.Alpha_Body_MAT.dispose()
+      Object.values(optimizedMaterials.muscles).forEach((material) => material.dispose())
+    }
+  }, [optimizedMaterials])
 
   useAnimations(animations, group)
 
@@ -88,7 +124,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Muscle_Chest"
           geometry={nodes.Muscle_Chest.geometry}
-          material={optimizedMaterials.Alpha_Body_MAT}
+          material={optimizedMaterials.muscles.Muscle_Chest}
           skeleton={nodes.Muscle_Chest.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
@@ -96,7 +132,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Muscle_Biceps"
           geometry={nodes.Muscle_Biceps.geometry}
-          material={optimizedMaterials.Alpha_Body_MAT}
+          material={optimizedMaterials.muscles.Muscle_Biceps}
           skeleton={nodes.Muscle_Biceps.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
@@ -104,7 +140,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Muscle_Abs"
           geometry={nodes.Muscle_Abs.geometry}
-          material={optimizedMaterials.Alpha_Body_MAT}
+          material={optimizedMaterials.muscles.Muscle_Abs}
           skeleton={nodes.Muscle_Abs.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
@@ -112,7 +148,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
         <skinnedMesh
           name="Muscle_Quads"
           geometry={nodes.Muscle_Quads.geometry}
-          material={optimizedMaterials.Alpha_Body_MAT}
+          material={optimizedMaterials.muscles.Muscle_Quads}
           skeleton={nodes.Muscle_Quads.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
@@ -122,7 +158,7 @@ function HostedMuscleModel(props: MuscleModelProps) {
   )
 }
 
-function ProceduralMuscleModel(props: MuscleModelProps) {
+function ProceduralMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
   return (
     <group {...props}>
       <mesh position={[0, 3.2, 0]} castShadow receiveShadow>
@@ -169,6 +205,10 @@ function ProceduralMuscleModel(props: MuscleModelProps) {
           )}
           <meshStandardMaterial
             color={MUSCLE_COLOR_BY_ID.get(part.muscleId) ?? '#f8fafc'}
+            emissive={part.muscleId === selectedMuscleId ? HIGHLIGHT_COLOR : '#000000'}
+            emissiveIntensity={part.muscleId === selectedMuscleId ? 0.85 : 0}
+            transparent={false}
+            opacity={1}
             roughness={0.42}
             metalness={0.05}
           />

@@ -122,7 +122,7 @@ function AnatomyModel({
 
   return (
     <group position={[0, -1.15, 0]}>
-      <MuscleModel position={[0, 0.8, 0]} scale={2} />
+      <MuscleModel position={[0, 0.8, 0]} scale={2} selectedMuscleId={selectedMuscleId} />
 
       {MUSCLES.map((muscle, index) => (
         <MuscleMarker
