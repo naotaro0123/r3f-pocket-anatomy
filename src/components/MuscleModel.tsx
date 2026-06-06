@@ -12,6 +12,11 @@ type GLTFResult = GLTF & {
     mixamorigHips: Bone
     Alpha_Joints: SkinnedMesh
     Alpha_Surface: SkinnedMesh
+    // 下記のMaterialはAlpha_Body_MATを共有
+    Muscle_Chest: SkinnedMesh  // 大胸筋
+    Muscle_Biceps: SkinnedMesh // 上腕二頭筋
+    Muscle_Abs: SkinnedMesh // 腹直筋
+    Muscle_Quads: SkinnedMesh // 大腿四頭筋
   }
   materials: {
     Alpha_Joints_MAT: MeshStandardMaterial
@@ -77,6 +82,38 @@ function HostedMuscleModel(props: MuscleModelProps) {
           geometry={nodes.Alpha_Surface.geometry}
           material={optimizedMaterials.Alpha_Body_MAT}
           skeleton={nodes.Alpha_Surface.skeleton}
+          rotation={MODEL_ROTATION}
+          scale={MODEL_SCALE}
+        />
+        <skinnedMesh
+          name="Muscle_Chest"
+          geometry={nodes.Muscle_Chest.geometry}
+          material={optimizedMaterials.Alpha_Body_MAT}
+          skeleton={nodes.Muscle_Chest.skeleton}
+          rotation={MODEL_ROTATION}
+          scale={MODEL_SCALE}
+        />
+        <skinnedMesh
+          name="Muscle_Biceps"
+          geometry={nodes.Muscle_Biceps.geometry}
+          material={optimizedMaterials.Alpha_Body_MAT}
+          skeleton={nodes.Muscle_Biceps.skeleton}
+          rotation={MODEL_ROTATION}
+          scale={MODEL_SCALE}
+        />
+        <skinnedMesh
+          name="Muscle_Abs"
+          geometry={nodes.Muscle_Abs.geometry}
+          material={optimizedMaterials.Alpha_Body_MAT}
+          skeleton={nodes.Muscle_Abs.skeleton}
+          rotation={MODEL_ROTATION}
+          scale={MODEL_SCALE}
+        />
+        <skinnedMesh
+          name="Muscle_Quads"
+          geometry={nodes.Muscle_Quads.geometry}
+          material={optimizedMaterials.Alpha_Body_MAT}
+          skeleton={nodes.Muscle_Quads.skeleton}
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
         />
