@@ -63,6 +63,14 @@ function createMuscleMaterial(
   return material
 }
 
+function MusclePartGeometry({ geometry }: { geometry: 'box' | 'capsule' }) {
+  return geometry === 'capsule' ? (
+    <capsuleGeometry args={[0.38, 1, 8, 16]} />
+  ) : (
+    <boxGeometry args={[1, 1, 1]} />
+  )
+}
+
 function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
   const group = useRef<Group>(null)
   const { scene, animations } = useGLTF(MODEL_URL) as GLTF
@@ -198,11 +206,7 @@ function ProceduralMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps)
           castShadow
           receiveShadow
         >
-          {part.geometry === 'capsule' ? (
-            <capsuleGeometry args={[0.38, 1, 8, 16]} />
-          ) : (
-            <boxGeometry args={[1, 1, 1]} />
-          )}
+          <MusclePartGeometry geometry={part.geometry} />
           <meshStandardMaterial
             color={MUSCLE_COLOR_BY_ID.get(part.muscleId) ?? '#f8fafc'}
             emissive={part.muscleId === selectedMuscleId ? HIGHLIGHT_COLOR : '#000000'}

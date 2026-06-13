@@ -17,6 +17,9 @@ const MARKER_Y_OFFSET = 0.18
 const MARKER_Z_OFFSET = 0.18
 const CALLOUT_X_OFFSET = 0.24
 const CALLOUT_Y_OFFSET = 0.1
+const MARKER_RADIUS = 0.115
+const MARKER_RING_RADIUS = 0.13
+const MARKER_FONT_SIZE = 0.105
 const CAMERA_TARGET: [number, number, number] = [0, 1.55, 0]
 
 const CAMERA_PRESETS = {
@@ -79,7 +82,7 @@ function MuscleMarker({
           onPointerOut={handlePointerOut}
           position={[0, 0, -0.001]}
         >
-          <ringGeometry args={[0.13, 0.145, 32]} />
+          <ringGeometry args={[MARKER_RING_RADIUS, MARKER_RING_RADIUS + 0.015, 32]} />
           <meshBasicMaterial
             color={isActive || isHovered ? '#fb7185' : '#e2e8f0'}
             opacity={isActive ? 0.92 : isHovered ? 0.78 : 0.58}
@@ -91,7 +94,7 @@ function MuscleMarker({
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <circleGeometry args={[0.13, 32]} />
+          <circleGeometry args={[MARKER_RADIUS, 32]} />
           <meshBasicMaterial
             color={isActive ? '#be185d' : isHovered ? '#1e293b' : '#0f172a'}
             opacity={isActive ? 0.88 : isHovered ? 0.8 : 0.62}
@@ -100,7 +103,7 @@ function MuscleMarker({
         </mesh>
         <Text
           position={[0, 0, 0.02]}
-          fontSize={0.12}
+          fontSize={MARKER_FONT_SIZE}
           color="#f8fafc"
           anchorX="center"
           anchorY="middle"

@@ -15,8 +15,7 @@
 }
 
 .panel-label,
-.panel-hint,
-.latin-name {
+.panel-hint {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -61,7 +60,6 @@
 .panel-header {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
   align-items: end;
 }
 
@@ -150,18 +148,14 @@
 
 .info-card {
   display: grid;
-  gap: 14px;
+  gap: 4px;
   padding: 20px;
   border-radius: 24px;
 }
 
-.latin-name {
-  color: rgba(147, 197, 253, 0.8);
-  font-size: 0.74rem;
-}
-
 .muscle-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -189,6 +183,26 @@
   background: linear-gradient(135deg, rgba(127, 29, 29, 0.75), rgba(30, 41, 59, 0.88));
 }
 
+.muscle-chip-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.muscle-chip-index {
+  display: inline-grid;
+  place-items: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border: 1px solid rgba(191, 219, 254, 0.22);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #f8fafc;
+  font-size: 0.74rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .muscle-chip span,
 .muscle-chip small {
   pointer-events: none;
@@ -204,6 +218,10 @@
 @media (max-width: 1100px) {
   .workspace {
     grid-template-columns: 1fr;
+  }
+
+  .muscle-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -231,5 +249,9 @@
 
   .canvas-stage {
     min-height: 420px;
+  }
+
+  .muscle-list {
+    grid-template-columns: 1fr;
   }
 }

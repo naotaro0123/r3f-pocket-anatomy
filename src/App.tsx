@@ -18,8 +18,7 @@ function App() {
         <div className="canvas-panel">
           <div className="panel-header">
             <div>
-              <p className="panel-label">Viewer</p>
-              <h2>Anterior anatomy model</h2>
+              <h2>ポケット解剖図鑑</h2>
             </div>
             <p className="panel-hint">
               ドラッグで回転 / ホイールでズーム / 番号ラベルをホバーでハイライト・クリックで詳細表示
@@ -36,9 +35,8 @@ function App() {
 
         <aside className="info-panel">
           <section className="info-card">
-            <p className="panel-label">Selected muscle</p>
+            <p className="panel-label">筋肉を選択して下さい。</p>
             <h2>{selectedMuscle?.name ?? '未選択'}</h2>
-            <p className="latin-name">{selectedMuscle?.latinName ?? 'No muscle selected'}</p>
             <p className="muscle-description">
               {selectedMuscle?.description ??
               '番号ラベルをクリックすると、ここに筋肉名と説明を表示します。ホバー中はモデルだけハイライトされます。'}
@@ -46,9 +44,9 @@ function App() {
           </section>
 
           <section className="info-card">
-            <p className="panel-label">Muscle regions</p>
+            <p className="panel-label">筋肉の部位</p>
             <div className="muscle-list" role="list">
-              {MUSCLES.map((muscle) => {
+              {MUSCLES.map((muscle, index) => {
                 const isActive = muscle.id === selectedMuscleId
 
                 return (
@@ -58,8 +56,10 @@ function App() {
                     className={`muscle-chip${isActive ? ' is-active' : ''}`}
                     onClick={() => setSelectedMuscleId(muscle.id)}
                   >
-                    <span>{muscle.name}</span>
-                    <small>{muscle.shortLabel}</small>
+                    <span className="muscle-chip-label">
+                      <span className="muscle-chip-index">{index + 1}</span>
+                      <span>{muscle.name}</span>
+                    </span>
                   </button>
                 )
               })}
