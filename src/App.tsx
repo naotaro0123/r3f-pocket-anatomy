@@ -5,6 +5,7 @@ import { type MuscleId, MUSCLES } from './data/muscles'
 
 function App() {
   const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(null)
+  const [highlightedMuscleId, setHighlightedMuscleId] = useState<MuscleId | null>(null)
 
   const selectedMuscle = useMemo(
     () => MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null,
@@ -20,11 +21,15 @@ function App() {
               <p className="panel-label">Viewer</p>
               <h2>Anterior anatomy model</h2>
             </div>
-            <p className="panel-hint">ドラッグで回転 / ホイールでズーム / 番号ラベルをクリック</p>
+            <p className="panel-hint">
+              ドラッグで回転 / ホイールでズーム / 番号ラベルをホバーでハイライト・クリックで詳細表示
+            </p>
           </div>
 
           <AnatomyCanvas
+            highlightedMuscleId={highlightedMuscleId}
             selectedMuscleId={selectedMuscleId}
+            onHighlightMuscle={setHighlightedMuscleId}
             onSelectMuscle={setSelectedMuscleId}
           />
         </div>
@@ -36,7 +41,7 @@ function App() {
             <p className="latin-name">{selectedMuscle?.latinName ?? 'No muscle selected'}</p>
             <p className="muscle-description">
               {selectedMuscle?.description ??
-                '番号ラベルをクリックすると、ここに筋肉名と説明を表示します。'}
+              '番号ラベルをクリックすると、ここに筋肉名と説明を表示します。ホバー中はモデルだけハイライトされます。'}
             </p>
           </section>
 

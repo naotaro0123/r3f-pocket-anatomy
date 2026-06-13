@@ -7,7 +7,9 @@ import { MUSCLES, type MuscleId } from '../data/muscles'
 import { MuscleModel } from './MuscleModel'
 
 type AnatomyCanvasProps = {
+  highlightedMuscleId: MuscleId | null
   selectedMuscleId: MuscleId | null
+  onHighlightMuscle: (muscleId: MuscleId | null) => void
   onSelectMuscle: (muscleId: MuscleId | null) => void
 }
 
@@ -38,12 +40,14 @@ function MuscleMarker({
   index,
   isActive,
   muscleId,
+  onHighlightMuscle,
   position,
   onSelectMuscle,
 }: {
   index: number
   isActive: boolean
   muscleId: MuscleId
+  onHighlightMuscle: (muscleId: MuscleId | null) => void
   position: [number, number, number]
   onSelectMuscle: (muscleId: MuscleId) => void
 }) {
@@ -57,11 +61,13 @@ function MuscleMarker({
   const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()
     setIsHovered(true)
+    onHighlightMuscle(muscleId)
   }
 
   const handlePointerOut = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()
     setIsHovered(false)
+    onHighlightMuscle(null)
   }
 
   return (
@@ -110,19 +116,28 @@ function MuscleMarker({
 }
 
 function AnatomyModel({
+  highlightedMuscleId,
   selectedMuscleId,
+  onHighlightMuscle,
   onSelectMuscle,
 }: {
+  highlightedMuscleId: MuscleId | null
   selectedMuscleId: MuscleId | null
+  onHighlightMuscle: (muscleId: MuscleId | null) => void
   onSelectMuscle: (muscleId: MuscleId) => void
 }) {
   const selectedMuscle = selectedMuscleId
     ? MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null
     : null
+  const highlightedOrSelectedMuscleId = highlightedMuscleId ?? selectedMuscleId
 
   return (
     <group position={[0, -1.15, 0]}>
-      <MuscleModel position={[0, 0.8, 0]} scale={2} selectedMuscleId={selectedMuscleId} />
+      <MuscleModel
+        position={[0, 0.8, 0]}
+        scale={2}
+        selectedMuscleId={highlightedOrSelectedMuscleId}
+      />
 
       {MUSCLES.map((muscle, index) => (
         <MuscleMarker
@@ -130,6 +145,7 @@ function AnatomyModel({
           index={index}
           isActive={muscle.id === selectedMuscleId}
           muscleId={muscle.id}
+          onHighlightMuscle={onHighlightMuscle}
           position={[
             muscle.labelPosition[0],
             muscle.labelPosition[1] + MARKER_Y_OFFSET,
@@ -180,7 +196,12 @@ function CameraPresetController({
   return null
 }
 
-export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanvasProps) {
+export function AnatomyCanvas({
+  highlightedMuscleId,
+  selectedMuscleId,
+  onHighlightMuscle,
+  onSelectMuscle,
+}: AnatomyCanvasProps) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null)
   const [cameraPreset, setCameraPreset] = useState<CameraPresetKey>('front')
   const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null)
@@ -209,7 +230,10 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
         gl={{ antialias: true, powerPreference: 'high-performance' }}
         shadows
         camera={{ position: CAMERA_PRESETS.front.position, fov: 32 }}
-        onPointerMissed={() => onSelectMuscle(null)}
+        onPointerMissed={() => {
+          onHighlightMuscle(null)
+          onSelectMuscle(null)
+        }}
       >
         {statsParentRef ? <Stats parent={statsParentRef} className="canvas-stats" /> : null}
         <color attach="background" args={['#87ceeb']} />
@@ -232,7 +256,12 @@ export function AnatomyCanvas({ selectedMuscleId, onSelectMuscle }: AnatomyCanva
 
         <Suspense fallback={null}>
           <CameraPresetController controlsRef={controlsRef} preset={cameraPreset} />
-          <AnatomyModel selectedMuscleId={selectedMuscleId} onSelectMuscle={onSelectMuscle} />
+          <AnatomyModel
+            highlightedMuscleId={highlightedMuscleId}
+            selectedMuscleId={selectedMuscleId}
+            onHighlightMuscle={onHighlightMuscle}
+            onSelectMuscle={onSelectMuscle}
+          />
         </Suspense>
 
         <OrbitControls
