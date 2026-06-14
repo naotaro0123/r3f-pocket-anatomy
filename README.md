@@ -27,17 +27,27 @@ VITE_MUSCLE_MODEL_SCALE=0.01
 
 1. 再配布可能なモデルを `public/models/your-model.glb` に置く
 2. `.env.local` に `VITE_MUSCLE_MODEL_URL=/models/your-model.glb` を設定する
-3. `npm run dev` で確認する
+3. `yarn dev` で確認する
 
 ## 開発
 
 ```bash
-npm install
-npm run dev
+yarn
+yarn dev
 ```
 
 ## ビルド
 
 ```bash
-npm run build
+yarn build
 ```
+
+## フォーマット
+
+```bash
+yarn format
+yarn format:check
+```
+
+- VS Code で保存時整形を有効にする場合は、ユーザー設定ではなく、このリポジトリの `.vscode/settings.json` にワークスペース設定として入れてください。
+- `yarn format` はリポジトリ全体を整形するため、保存時は Oxc の VS Code 拡張 (`oxc.oxc-vscode`) を使って、開いているファイルだけを `formatOnSave` する運用を推奨します。

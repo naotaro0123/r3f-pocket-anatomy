@@ -1,43 +1,43 @@
-import { Billboard, Html, OrbitControls, Stats, Text } from '@react-three/drei'
-import { Canvas, useThree } from '@react-three/fiber'
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import type { ThreeEvent } from '@react-three/fiber'
-import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
-import { MUSCLES, type MuscleId } from '../data/muscles'
-import { MuscleModel } from './MuscleModel'
+import { Billboard, Html, OrbitControls, Stats, Text } from "@react-three/drei";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import type { ThreeEvent } from "@react-three/fiber";
+import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { MUSCLES, type MuscleId } from "../data/muscles";
+import { MuscleModel } from "./MuscleModel";
 
 type AnatomyCanvasProps = {
-  highlightedMuscleId: MuscleId | null
-  selectedMuscleId: MuscleId | null
-  onHighlightMuscle: (muscleId: MuscleId | null) => void
-  onSelectMuscle: (muscleId: MuscleId | null) => void
-}
+  highlightedMuscleId: MuscleId | null;
+  selectedMuscleId: MuscleId | null;
+  onHighlightMuscle: (muscleId: MuscleId | null) => void;
+  onSelectMuscle: (muscleId: MuscleId | null) => void;
+};
 
-const MARKER_Y_OFFSET = 0.18
-const MARKER_Z_OFFSET = 0.18
-const CALLOUT_X_OFFSET = 0.24
-const CALLOUT_Y_OFFSET = 0.1
-const MARKER_RADIUS = 0.115
-const MARKER_RING_RADIUS = 0.13
-const MARKER_FONT_SIZE = 0.105
-const CAMERA_TARGET: [number, number, number] = [0, 1.55, 0]
+const MARKER_Y_OFFSET = 0.18;
+const MARKER_Z_OFFSET = 0.18;
+const CALLOUT_X_OFFSET = 0.24;
+const CALLOUT_Y_OFFSET = 0.1;
+const MARKER_RADIUS = 0.115;
+const MARKER_RING_RADIUS = 0.13;
+const MARKER_FONT_SIZE = 0.105;
+const CAMERA_TARGET: [number, number, number] = [0, 1.55, 0];
 
 const CAMERA_PRESETS = {
   front: {
-    label: 'フロントビュー',
+    label: "フロントビュー",
     position: [0, 1.9, 7.9] as [number, number, number],
   },
   side: {
-    label: 'サイドビュー',
+    label: "サイドビュー",
     position: [7.9, 1.9, 0] as [number, number, number],
   },
   topRight: {
-    label: 'クォータービュー',
+    label: "クォータービュー",
     position: [6.1, 3.05, 6.1] as [number, number, number],
   },
-} as const
+} as const;
 
-type CameraPresetKey = keyof typeof CAMERA_PRESETS
+type CameraPresetKey = keyof typeof CAMERA_PRESETS;
 
 function MuscleMarker({
   index,
@@ -47,31 +47,31 @@ function MuscleMarker({
   position,
   onSelectMuscle,
 }: {
-  index: number
-  isActive: boolean
-  muscleId: MuscleId
-  onHighlightMuscle: (muscleId: MuscleId | null) => void
-  position: [number, number, number]
-  onSelectMuscle: (muscleId: MuscleId) => void
+  index: number;
+  isActive: boolean;
+  muscleId: MuscleId;
+  onHighlightMuscle: (muscleId: MuscleId | null) => void;
+  position: [number, number, number];
+  onSelectMuscle: (muscleId: MuscleId) => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleSelect = (event: ThreeEvent<MouseEvent>) => {
-    event.stopPropagation()
-    onSelectMuscle(muscleId)
-  }
+    event.stopPropagation();
+    onSelectMuscle(muscleId);
+  };
 
   const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
-    setIsHovered(true)
-    onHighlightMuscle(muscleId)
-  }
+    event.stopPropagation();
+    setIsHovered(true);
+    onHighlightMuscle(muscleId);
+  };
 
   const handlePointerOut = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
-    setIsHovered(false)
-    onHighlightMuscle(null)
-  }
+    event.stopPropagation();
+    setIsHovered(false);
+    onHighlightMuscle(null);
+  };
 
   return (
     <Billboard position={position} follow>
@@ -84,7 +84,7 @@ function MuscleMarker({
         >
           <ringGeometry args={[MARKER_RING_RADIUS, MARKER_RING_RADIUS + 0.015, 32]} />
           <meshBasicMaterial
-            color={isActive || isHovered ? '#fb7185' : '#e2e8f0'}
+            color={isActive || isHovered ? "#fb7185" : "#e2e8f0"}
             opacity={isActive ? 0.92 : isHovered ? 0.78 : 0.58}
             transparent
           />
@@ -96,7 +96,7 @@ function MuscleMarker({
         >
           <circleGeometry args={[MARKER_RADIUS, 32]} />
           <meshBasicMaterial
-            color={isActive ? '#be185d' : isHovered ? '#1e293b' : '#0f172a'}
+            color={isActive ? "#be185d" : isHovered ? "#1e293b" : "#0f172a"}
             opacity={isActive ? 0.88 : isHovered ? 0.8 : 0.62}
             transparent
           />
@@ -115,7 +115,7 @@ function MuscleMarker({
         </Text>
       </group>
     </Billboard>
-  )
+  );
 }
 
 function AnatomyModel({
@@ -124,15 +124,15 @@ function AnatomyModel({
   onHighlightMuscle,
   onSelectMuscle,
 }: {
-  highlightedMuscleId: MuscleId | null
-  selectedMuscleId: MuscleId | null
-  onHighlightMuscle: (muscleId: MuscleId | null) => void
-  onSelectMuscle: (muscleId: MuscleId) => void
+  highlightedMuscleId: MuscleId | null;
+  selectedMuscleId: MuscleId | null;
+  onHighlightMuscle: (muscleId: MuscleId | null) => void;
+  onSelectMuscle: (muscleId: MuscleId) => void;
 }) {
   const selectedMuscle = selectedMuscleId
-    ? MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null
-    : null
-  const highlightedOrSelectedMuscleId = highlightedMuscleId ?? selectedMuscleId
+    ? (MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null)
+    : null;
+  const highlightedOrSelectedMuscleId = highlightedMuscleId ?? selectedMuscleId;
 
   return (
     <group position={[0, -1.15, 0]}>
@@ -165,38 +165,38 @@ function AnatomyModel({
             selectedMuscle.labelPosition[1] + MARKER_Y_OFFSET + CALLOUT_Y_OFFSET,
             selectedMuscle.labelPosition[2] + MARKER_Z_OFFSET,
           ]}
-          style={{ pointerEvents: 'none' }}
+          style={{ pointerEvents: "none" }}
         >
           <div className="muscle-callout">{selectedMuscle.name}</div>
         </Html>
       ) : null}
     </group>
-  )
+  );
 }
 
 function CameraPresetController({
   controlsRef,
   preset,
 }: {
-  controlsRef: React.RefObject<OrbitControlsImpl | null>
-  preset: CameraPresetKey
+  controlsRef: React.RefObject<OrbitControlsImpl | null>;
+  preset: CameraPresetKey;
 }) {
-  const { camera } = useThree()
+  const { camera } = useThree();
 
   useEffect(() => {
-    const controls = controlsRef.current
-    const { position } = CAMERA_PRESETS[preset]
+    const controls = controlsRef.current;
+    const { position } = CAMERA_PRESETS[preset];
 
-    camera.position.set(...position)
-    camera.lookAt(...CAMERA_TARGET)
+    camera.position.set(...position);
+    camera.lookAt(...CAMERA_TARGET);
 
     if (controls) {
-      controls.target.set(...CAMERA_TARGET)
-      controls.update()
+      controls.target.set(...CAMERA_TARGET);
+      controls.update();
     }
-  }, [camera, controlsRef, preset])
+  }, [camera, controlsRef, preset]);
 
-  return null
+  return null;
 }
 
 export function AnatomyCanvas({
@@ -205,13 +205,13 @@ export function AnatomyCanvas({
   onHighlightMuscle,
   onSelectMuscle,
 }: AnatomyCanvasProps) {
-  const controlsRef = useRef<OrbitControlsImpl | null>(null)
-  const [cameraPreset, setCameraPreset] = useState<CameraPresetKey>('front')
-  const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null)
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
+  const [cameraPreset, setCameraPreset] = useState<CameraPresetKey>("front");
+  const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null);
   const statsParentRef = useMemo(
     () => (statsParent ? { current: statsParent } : undefined),
     [statsParent],
-  )
+  );
 
   return (
     <div ref={setStatsParent} className="canvas-stage">
@@ -220,7 +220,7 @@ export function AnatomyCanvas({
           <button
             key={key}
             type="button"
-            className={`camera-debug-button${cameraPreset === key ? ' is-active' : ''}`}
+            className={`camera-debug-button${cameraPreset === key ? " is-active" : ""}`}
             onClick={() => setCameraPreset(key as CameraPresetKey)}
           >
             {preset.label}
@@ -230,17 +230,17 @@ export function AnatomyCanvas({
 
       <Canvas
         dpr={[1, 1.5]}
-        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        gl={{ antialias: true, powerPreference: "high-performance" }}
         shadows
         camera={{ position: CAMERA_PRESETS.front.position, fov: 32 }}
         onPointerMissed={() => {
-          onHighlightMuscle(null)
-          onSelectMuscle(null)
+          onHighlightMuscle(null);
+          onSelectMuscle(null);
         }}
       >
         {statsParentRef ? <Stats parent={statsParentRef} className="canvas-stats" /> : null}
-        <color attach="background" args={['#87ceeb']} />
-        <fog attach="fog" args={['#87ceeb', 8, 14]} />
+        <color attach="background" args={["#87ceeb"]} />
+        <fog attach="fog" args={["#87ceeb", 8, 14]} />
         <ambientLight intensity={0.9} />
         <directionalLight
           castShadow
@@ -278,5 +278,5 @@ export function AnatomyCanvas({
         />
       </Canvas>
     </div>
-  )
+  );
 }
