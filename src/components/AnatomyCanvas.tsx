@@ -5,6 +5,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { MUSCLES, type MuscleId } from "../data/muscles";
 import { MuscleModel } from "./MuscleModel";
+import { MuscleNameRuby } from "./MuscleNameRuby";
 
 type AnatomyCanvasProps = {
   highlightedMuscleId: MuscleId | null;
@@ -167,7 +168,13 @@ function AnatomyModel({
           ]}
           style={{ pointerEvents: "none" }}
         >
-          <div className="muscle-callout">{selectedMuscle.name}</div>
+          <div className="muscle-callout">
+            <MuscleNameRuby
+              name={selectedMuscle.name}
+              reading={selectedMuscle.reading}
+              className="muscle-name-ruby muscle-name-ruby-callout"
+            />
+          </div>
         </Html>
       ) : null}
     </group>

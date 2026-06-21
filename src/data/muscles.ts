@@ -11,6 +11,7 @@ export type MuscleId =
 type MuscleDefinition = {
   id: MuscleId;
   name: string;
+  reading: string;
   description: string;
   color: string;
   labelPosition: Vector3Tuple;
@@ -31,6 +32,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Chest",
     name: "大胸筋",
+    reading: "だいきょうきん",
     description: "胸郭の前面に広がる筋。肩関節の内転・内旋や押す動きの基礎になります。",
     color: "#f97316",
     labelPosition: [0, 3.18, 0.3],
@@ -38,6 +40,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Deltoid",
     name: "三角筋",
+    reading: "さんかくきん",
     description: "肩を包み込む大きな筋で、腕を上げる動きや肩関節の安定化に関わります。",
     color: "#a855f7",
     labelPosition: [0.4, 3.72, 0.1],
@@ -45,6 +48,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Biceps",
     name: "上腕二頭筋",
+    reading: "じょうわんにとうきん",
     description: "肘関節の屈曲と前腕の回外に関わる、上腕前面の代表的な筋です。",
     color: "#fb7185",
     labelPosition: [0.7, 3.38, 0.05],
@@ -52,6 +56,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Abs",
     name: "腹直筋",
+    reading: "ふくちょくきん",
     description: "体幹前面を支える筋。体幹屈曲や姿勢保持に関与します。",
     color: "#22c55e",
     labelPosition: [0, 2.62, 0.3],
@@ -59,6 +64,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Obliques",
     name: "腹斜筋",
+    reading: "ふくしゃきん",
     description: "体幹の回旋や側屈を助け、腹部の安定性を高める側腹部の筋群です。",
     color: "#eab308",
     labelPosition: [0.3, 2.88, 0.2],
@@ -66,6 +72,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Quads",
     name: "大腿四頭筋",
+    reading: "だいたいしとうきん",
     description: "膝関節の伸展を担う大腿前面の大きな筋群です。",
     color: "#38bdf8",
     labelPosition: [0.34, 2.26, 0.2],
@@ -73,6 +80,7 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_TibialisAnterior",
     name: "前脛骨筋",
+    reading: "ぜんけいこつきん",
     description: "足首を持ち上げる背屈に関わり、歩行時につま先をクリアに保つ下腿前面の筋です。",
     color: "#f43f5e",
     labelPosition: [0.44, 0.98, -0.18],
