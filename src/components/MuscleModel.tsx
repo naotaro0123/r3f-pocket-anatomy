@@ -15,17 +15,23 @@ type MuscleModelProps = ThreeElements["group"] & {
   selectedMuscleId?: MuscleId | null;
 };
 type RotationTuple = [number, number, number];
+const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
+  "Muscle_Chest",
+  "Muscle_Deltoid",
+  "Muscle_Biceps",
+  "Muscle_Abs",
+  "Muscle_Obliques",
+  "Muscle_Quads",
+  "Muscle_TibialisAnterior",
+] as const satisfies readonly MuscleId[];
+type GltfHighlightableMuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
 type GLTFResult = GLTF & {
   nodes: {
     mixamorigHips: Bone;
     Alpha_Joints: SkinnedMesh;
     Alpha_Surface: SkinnedMesh;
     // 下記のMaterialはAlpha_Body_MATを共有
-    Muscle_Chest: SkinnedMesh; // 大胸筋
-    Muscle_Biceps: SkinnedMesh; // 上腕二頭筋
-    Muscle_Abs: SkinnedMesh; // 腹直筋
-    Muscle_Quads: SkinnedMesh; // 大腿四頭筋
-  };
+  } & Record<GltfHighlightableMuscleId, SkinnedMesh>;
   materials: {
     Alpha_Joints_MAT: MeshStandardMaterial;
     Alpha_Body_MAT: MeshStandardMaterial;
@@ -94,24 +100,12 @@ function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
     return {
       Alpha_Joints_MAT: jointsMaterial,
       Alpha_Body_MAT: bodyMaterial,
-      muscles: {
-        Muscle_Chest: createMuscleMaterial(
-          materials.Alpha_Body_MAT,
-          "Muscle_Chest",
-          selectedMuscleId,
-        ),
-        Muscle_Biceps: createMuscleMaterial(
-          materials.Alpha_Body_MAT,
-          "Muscle_Biceps",
-          selectedMuscleId,
-        ),
-        Muscle_Abs: createMuscleMaterial(materials.Alpha_Body_MAT, "Muscle_Abs", selectedMuscleId),
-        Muscle_Quads: createMuscleMaterial(
-          materials.Alpha_Body_MAT,
-          "Muscle_Quads",
-          selectedMuscleId,
-        ),
-      },
+      muscles: Object.fromEntries(
+        GLTF_HIGHLIGHTABLE_MUSCLE_IDS.map((muscleId) => [
+          muscleId,
+          createMuscleMaterial(materials.Alpha_Body_MAT, muscleId, selectedMuscleId),
+        ]),
+      ) as Record<GltfHighlightableMuscleId, MeshStandardMaterial>,
     };
   }, [materials, selectedMuscleId]);
 
@@ -147,38 +141,17 @@ function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
           rotation={MODEL_ROTATION}
           scale={MODEL_SCALE}
         />
-        <skinnedMesh
-          name="Muscle_Chest"
-          geometry={nodes.Muscle_Chest.geometry}
-          material={optimizedMaterials.muscles.Muscle_Chest}
-          skeleton={nodes.Muscle_Chest.skeleton}
-          rotation={MODEL_ROTATION}
-          scale={MODEL_SCALE}
-        />
-        <skinnedMesh
-          name="Muscle_Biceps"
-          geometry={nodes.Muscle_Biceps.geometry}
-          material={optimizedMaterials.muscles.Muscle_Biceps}
-          skeleton={nodes.Muscle_Biceps.skeleton}
-          rotation={MODEL_ROTATION}
-          scale={MODEL_SCALE}
-        />
-        <skinnedMesh
-          name="Muscle_Abs"
-          geometry={nodes.Muscle_Abs.geometry}
-          material={optimizedMaterials.muscles.Muscle_Abs}
-          skeleton={nodes.Muscle_Abs.skeleton}
-          rotation={MODEL_ROTATION}
-          scale={MODEL_SCALE}
-        />
-        <skinnedMesh
-          name="Muscle_Quads"
-          geometry={nodes.Muscle_Quads.geometry}
-          material={optimizedMaterials.muscles.Muscle_Quads}
-          skeleton={nodes.Muscle_Quads.skeleton}
-          rotation={MODEL_ROTATION}
-          scale={MODEL_SCALE}
-        />
+        {GLTF_HIGHLIGHTABLE_MUSCLE_IDS.map((muscleId) => (
+          <skinnedMesh
+            key={muscleId}
+            name={muscleId}
+            geometry={nodes[muscleId].geometry}
+            material={optimizedMaterials.muscles[muscleId]}
+            skeleton={nodes[muscleId].skeleton}
+            rotation={MODEL_ROTATION}
+            scale={MODEL_SCALE}
+          />
+        ))}
       </group>
     </group>
   );
