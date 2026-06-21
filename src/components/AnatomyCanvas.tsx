@@ -28,6 +28,10 @@ const CAMERA_PRESETS = {
     label: "フロントビュー",
     position: [0, 1.9, 7.9] as [number, number, number],
   },
+  back: {
+    label: "バックビュー",
+    position: [0, 1.9, -7.9] as [number, number, number],
+  },
   side: {
     label: "サイドビュー",
     position: [7.9, 1.9, 0] as [number, number, number],

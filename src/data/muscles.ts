@@ -6,7 +6,11 @@ export type MuscleId =
   | "Muscle_Abs" // 腹直筋
   | "Muscle_Obliques" // 腹斜筋
   | "Muscle_Quads" // 大腿四頭筋
-  | "Muscle_TibialisAnterior"; // 前脛骨筋
+  | "Muscle_TibialisAnterior" // 前脛骨筋
+  | "Muscle_Trapezius" // 僧帽筋
+  | "Muscle_LatissimusDorsi" // 広背筋
+  | "Muscle_TricepsBrachii" // 上腕三頭筋
+  | "Muscle_GluteusMaximus"; // 大殿筋
 
 type MuscleDefinition = {
   id: MuscleId;
@@ -84,6 +88,38 @@ export const MUSCLES: MuscleDefinition[] = [
     description: "足首を持ち上げる背屈に関わり、歩行時につま先をクリアに保つ下腿前面の筋です。",
     color: "#f43f5e",
     labelPosition: [0.44, 0.98, -0.18],
+  },
+  {
+    id: "Muscle_Trapezius",
+    name: "僧帽筋",
+    reading: "そうぼうきん",
+    description: "首から肩、背中上部へ広がる筋で、肩甲骨の挙上・内転や姿勢保持に関わります。",
+    color: "#14b8a6",
+    labelPosition: [0, 3.86, -0.46],
+  },
+  {
+    id: "Muscle_LatissimusDorsi",
+    name: "広背筋",
+    reading: "こうはいきん",
+    description: "背中の広い面積を占める筋で、腕を引く動きや肩関節の伸展・内転を助けます。",
+    color: "#8b5cf6",
+    labelPosition: [0, 3.22, -0.5],
+  },
+  {
+    id: "Muscle_TricepsBrachii",
+    name: "上腕三頭筋",
+    reading: "じょうわんさんとうきん",
+    description: "上腕後面の大きな筋で、肘を伸ばす動きの主力となります。",
+    color: "#f59e0b",
+    labelPosition: [-0.52, 3.2, -0.34],
+  },
+  {
+    id: "Muscle_GluteusMaximus",
+    name: "大殿筋",
+    reading: "だいでんきん",
+    description: "股関節の伸展や外旋に関わる大きな臀部の筋で、立ち上がりや走行時に重要です。",
+    color: "#ec4899",
+    labelPosition: [0, 2.54, -0.62],
   },
 ];
 
@@ -207,5 +243,69 @@ export const MUSCLE_PARTS: MusclePartDefinition[] = [
     position: [0.28, -0.98, 0.22],
     rotation: [0.08, -0.02, -0.02],
     scale: [0.26, 0.9, 0.24],
+  },
+  {
+    id: "Muscle_Trapezius-left",
+    muscleId: "Muscle_Trapezius",
+    geometry: "capsule",
+    position: [-0.4, 2.92, -0.34],
+    rotation: [-0.26, -0.08, -0.42],
+    scale: [0.72, 0.86, 0.44],
+  },
+  {
+    id: "Muscle_Trapezius-right",
+    muscleId: "Muscle_Trapezius",
+    geometry: "capsule",
+    position: [0.4, 2.92, -0.34],
+    rotation: [-0.26, 0.08, 0.42],
+    scale: [0.72, 0.86, 0.44],
+  },
+  {
+    id: "Muscle_LatissimusDorsi-left",
+    muscleId: "Muscle_LatissimusDorsi",
+    geometry: "capsule",
+    position: [-0.56, 1.96, -0.34],
+    rotation: [-0.08, 0.18, -0.22],
+    scale: [0.52, 1.18, 0.36],
+  },
+  {
+    id: "Muscle_LatissimusDorsi-right",
+    muscleId: "Muscle_LatissimusDorsi",
+    geometry: "capsule",
+    position: [0.56, 1.96, -0.34],
+    rotation: [-0.08, -0.18, 0.22],
+    scale: [0.52, 1.18, 0.36],
+  },
+  {
+    id: "Muscle_TricepsBrachii-left",
+    muscleId: "Muscle_TricepsBrachii",
+    geometry: "capsule",
+    position: [-1.04, 2.1, -0.18],
+    rotation: [-0.12, 0.02, -0.08],
+    scale: [0.42, 0.88, 0.4],
+  },
+  {
+    id: "Muscle_TricepsBrachii-right",
+    muscleId: "Muscle_TricepsBrachii",
+    geometry: "capsule",
+    position: [1.04, 2.1, -0.18],
+    rotation: [-0.12, -0.02, 0.08],
+    scale: [0.42, 0.88, 0.4],
+  },
+  {
+    id: "Muscle_GluteusMaximus-left",
+    muscleId: "Muscle_GluteusMaximus",
+    geometry: "capsule",
+    position: [-0.36, 0.78, -0.26],
+    rotation: [-0.08, 0.04, -0.12],
+    scale: [0.56, 0.72, 0.46],
+  },
+  {
+    id: "Muscle_GluteusMaximus-right",
+    muscleId: "Muscle_GluteusMaximus",
+    geometry: "capsule",
+    position: [0.36, 0.78, -0.26],
+    rotation: [-0.08, -0.04, 0.12],
+    scale: [0.56, 0.72, 0.46],
   },
 ];

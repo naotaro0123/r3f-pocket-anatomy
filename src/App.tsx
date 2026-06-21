@@ -35,7 +35,7 @@ function App() {
         </div>
 
         <aside className="info-panel">
-          <section className="info-card">
+          <section className="info-card info-card-detail">
             <p className="panel-label">筋肉を選択して下さい。</p>
             <h2>
               {selectedMuscle ? (
@@ -54,7 +54,7 @@ function App() {
             </p>
           </section>
 
-          <section className="info-card">
+          <section className="info-card info-card-scrollable">
             <p className="panel-label">筋肉の部位</p>
             <div className="muscle-list" role="list">
               {MUSCLES.map((muscle, index) => {

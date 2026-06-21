@@ -23,6 +23,10 @@ const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
   "Muscle_Obliques",
   "Muscle_Quads",
   "Muscle_TibialisAnterior",
+  "Muscle_Trapezius",
+  "Muscle_LatissimusDorsi",
+  "Muscle_TricepsBrachii",
+  "Muscle_GluteusMaximus",
 ] as const satisfies readonly MuscleId[];
 type GltfHighlightableMuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
 type GLTFResult = GLTF & {
