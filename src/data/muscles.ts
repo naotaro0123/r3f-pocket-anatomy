@@ -11,7 +11,6 @@ export type MuscleId =
 type MuscleDefinition = {
   id: MuscleId;
   name: string;
-  latinName: string;
   description: string;
   color: string;
   labelPosition: Vector3Tuple;
@@ -32,7 +31,6 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Chest",
     name: "大胸筋",
-    latinName: "Muscle_Chest",
     description: "胸郭の前面に広がる筋。肩関節の内転・内旋や押す動きの基礎になります。",
     color: "#f97316",
     labelPosition: [0, 3.18, 0.3],
@@ -40,31 +38,20 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Deltoid",
     name: "三角筋",
-    latinName: "Muscle_Deltoid",
     description: "肩を包み込む大きな筋で、腕を上げる動きや肩関節の安定化に関わります。",
     color: "#a855f7",
-    labelPosition: [-0.98, 3.72, 0.1],
+    labelPosition: [0.4, 3.72, 0.1],
   },
   {
     id: "Muscle_Biceps",
     name: "上腕二頭筋",
-    latinName: "Muscle_Biceps",
     description: "肘関節の屈曲と前腕の回外に関わる、上腕前面の代表的な筋です。",
     color: "#fb7185",
-    labelPosition: [1.08, 3.08, 0.05],
-  },
-  {
-    id: "Muscle_ForearmFlexors",
-    name: "前腕屈筋群",
-    latinName: "Muscle_ForearmFlexors",
-    description: "手首や指を曲げる働きを担う前腕前面の筋群で、握る動作の基盤になります。",
-    color: "#14b8a6",
-    labelPosition: [-1.3, 2.28, 0.22],
+    labelPosition: [0.7, 3.38, 0.05],
   },
   {
     id: "Muscle_Abs",
     name: "腹直筋",
-    latinName: "Muscle_Abs",
     description: "体幹前面を支える筋。体幹屈曲や姿勢保持に関与します。",
     color: "#22c55e",
     labelPosition: [0, 2.62, 0.3],
@@ -72,26 +59,23 @@ export const MUSCLES: MuscleDefinition[] = [
   {
     id: "Muscle_Obliques",
     name: "腹斜筋",
-    latinName: "Muscle_Obliques",
     description: "体幹の回旋や側屈を助け、腹部の安定性を高める側腹部の筋群です。",
     color: "#eab308",
-    labelPosition: [1.2, 2.38, 0.32],
+    labelPosition: [0.3, 2.88, 0.2],
   },
   {
     id: "Muscle_Quads",
     name: "大腿四頭筋",
-    latinName: "Muscle_Quads",
     description: "膝関節の伸展を担う大腿前面の大きな筋群です。",
     color: "#38bdf8",
-    labelPosition: [0.74, 1.66, 0.2],
+    labelPosition: [0.34, 2.26, 0.2],
   },
   {
     id: "Muscle_TibialisAnterior",
     name: "前脛骨筋",
-    latinName: "Muscle_TibialisAnterior",
     description: "足首を持ち上げる背屈に関わり、歩行時につま先をクリアに保つ下腿前面の筋です。",
     color: "#f43f5e",
-    labelPosition: [-0.74, 0.88, 0.18],
+    labelPosition: [0.44, 0.98, -0.18],
   },
 ];
 
