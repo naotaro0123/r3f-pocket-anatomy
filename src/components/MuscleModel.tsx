@@ -1,5 +1,5 @@
 import { useAnimations, useGLTF } from "@react-three/drei";
-import { useGraph, type ThreeElements } from "@react-three/fiber";
+import { useGraph, type ThreeElements, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import {
   FrontSide,
@@ -10,8 +10,10 @@ import {
 } from "three";
 import { SkeletonUtils, type GLTF } from "three-stdlib";
 import { MUSCLES, MUSCLE_PARTS, type MuscleId } from "../data/muscles";
+import { AtlasMuscleModel } from "./AtlasMuscleModel";
 
 type MuscleModelProps = ThreeElements["group"] & {
+  onHighlightMuscle?: (muscleId: MuscleId | null) => void;
   selectedMuscleId?: MuscleId | null;
 };
 type RotationTuple = [number, number, number];
@@ -43,7 +45,7 @@ type GLTFResult = GLTF & {
 };
 type MuscleGraph = Pick<GLTFResult, "nodes" | "materials">;
 
-const MODEL_URL = import.meta.env.VITE_MUSCLE_MODEL_URL?.trim() || "";
+const MODEL_URL = import.meta.env.VITE_MUSCLE_MODEL_URL?.trim() || "/models/atlas.json";
 const MODEL_ROTATION: RotationTuple = [
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_X, 90),
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_Y, 0),
@@ -87,7 +89,7 @@ function MusclePartGeometry({ geometry }: { geometry: "box" | "capsule" }) {
   );
 }
 
-function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
+function HostedMuscleModel({ onHighlightMuscle, selectedMuscleId, ...props }: MuscleModelProps) {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF(MODEL_URL) as GLTF;
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -154,6 +156,14 @@ function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
             skeleton={nodes[muscleId].skeleton}
             rotation={MODEL_ROTATION}
             scale={MODEL_SCALE}
+            onPointerOver={(event: ThreeEvent<PointerEvent>) => {
+              event.stopPropagation();
+              onHighlightMuscle?.(muscleId);
+            }}
+            onPointerOut={(event: ThreeEvent<PointerEvent>) => {
+              event.stopPropagation();
+              onHighlightMuscle?.(null);
+            }}
           />
         ))}
       </group>
@@ -161,7 +171,11 @@ function HostedMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
   );
 }
 
-function ProceduralMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps) {
+function ProceduralMuscleModel({
+  onHighlightMuscle,
+  selectedMuscleId,
+  ...props
+}: MuscleModelProps) {
   return (
     <group {...props}>
       <mesh position={[0, 3.2, 0]} castShadow receiveShadow>
@@ -200,6 +214,14 @@ function ProceduralMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps)
           scale={part.scale}
           castShadow
           receiveShadow
+          onPointerOver={(event: ThreeEvent<PointerEvent>) => {
+            event.stopPropagation();
+            onHighlightMuscle?.(part.muscleId);
+          }}
+          onPointerOut={(event: ThreeEvent<PointerEvent>) => {
+            event.stopPropagation();
+            onHighlightMuscle?.(null);
+          }}
         >
           <MusclePartGeometry geometry={part.geometry} />
           <meshStandardMaterial
@@ -218,11 +240,15 @@ function ProceduralMuscleModel({ selectedMuscleId, ...props }: MuscleModelProps)
 }
 
 export function MuscleModel(props: MuscleModelProps) {
+  if (MODEL_URL.endsWith(".json")) {
+    return <AtlasMuscleModel {...props} url={MODEL_URL} />;
+  }
+
   return MODEL_URL ? <HostedMuscleModel {...props} /> : <ProceduralMuscleModel {...props} />;
 }
 
 export { MuscleModel as Model };
 
-if (MODEL_URL) {
+if (MODEL_URL && !MODEL_URL.endsWith(".json")) {
   useGLTF.preload(MODEL_URL);
 }

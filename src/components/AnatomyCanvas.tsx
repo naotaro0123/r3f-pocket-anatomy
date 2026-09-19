@@ -47,6 +47,7 @@ type CameraPresetKey = keyof typeof CAMERA_PRESETS;
 function MuscleMarker({
   index,
   isActive,
+  isHighlighted,
   muscleId,
   onHighlightMuscle,
   position,
@@ -54,6 +55,7 @@ function MuscleMarker({
 }: {
   index: number;
   isActive: boolean;
+  isHighlighted: boolean;
   muscleId: MuscleId;
   onHighlightMuscle: (muscleId: MuscleId | null) => void;
   position: [number, number, number];
@@ -89,8 +91,8 @@ function MuscleMarker({
         >
           <ringGeometry args={[MARKER_RING_RADIUS, MARKER_RING_RADIUS + 0.015, 32]} />
           <meshBasicMaterial
-            color={isActive || isHovered ? "#fb7185" : "#e2e8f0"}
-            opacity={isActive ? 0.92 : isHovered ? 0.78 : 0.58}
+            color={isActive || isHighlighted || isHovered ? "#fb7185" : "#e2e8f0"}
+            opacity={isActive ? 0.92 : isHighlighted || isHovered ? 0.78 : 0.58}
             transparent
           />
         </mesh>
@@ -101,8 +103,8 @@ function MuscleMarker({
         >
           <circleGeometry args={[MARKER_RADIUS, 32]} />
           <meshBasicMaterial
-            color={isActive ? "#be185d" : isHovered ? "#1e293b" : "#0f172a"}
-            opacity={isActive ? 0.88 : isHovered ? 0.8 : 0.62}
+            color={isActive ? "#be185d" : isHighlighted || isHovered ? "#1e293b" : "#0f172a"}
+            opacity={isActive ? 0.88 : isHighlighted || isHovered ? 0.8 : 0.62}
             transparent
           />
         </mesh>
@@ -144,6 +146,7 @@ function AnatomyModel({
       <MuscleModel
         position={[0, 0.8, 0]}
         scale={2}
+        onHighlightMuscle={onHighlightMuscle}
         selectedMuscleId={highlightedOrSelectedMuscleId}
       />
 
@@ -152,6 +155,7 @@ function AnatomyModel({
           key={muscle.id}
           index={index}
           isActive={muscle.id === selectedMuscleId}
+          isHighlighted={muscle.id === highlightedMuscleId}
           muscleId={muscle.id}
           onHighlightMuscle={onHighlightMuscle}
           position={[
@@ -242,7 +246,6 @@ export function AnatomyCanvas({
       <Canvas
         dpr={[1, 1.5]}
         gl={{ antialias: true, powerPreference: "high-performance" }}
-        shadows
         camera={{ position: CAMERA_PRESETS.front.position, fov: 32 }}
         onPointerMissed={() => {
           onHighlightMuscle(null);
@@ -253,20 +256,9 @@ export function AnatomyCanvas({
         <color attach="background" args={["#87ceeb"]} />
         <fog attach="fog" args={["#87ceeb", 8, 14]} />
         <ambientLight intensity={0.9} />
-        <directionalLight
-          castShadow
-          intensity={2.8}
-          position={[4, 7, 4]}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-        />
+        <directionalLight intensity={2.8} position={[4, 7, 4]} />
         <pointLight intensity={18} position={[-4, 2, 2]} color="#60a5fa" />
         <pointLight intensity={10} position={[4, 1, -2]} color="#f472b6" />
-
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2.2, 0]} receiveShadow>
-          <circleGeometry args={[8, 64]} />
-          <shadowMaterial opacity={0.24} />
-        </mesh>
 
         <Suspense fallback={null}>
           <CameraPresetController controlsRef={controlsRef} preset={cameraPreset} />
@@ -280,11 +272,12 @@ export function AnatomyCanvas({
 
         <OrbitControls
           ref={controlsRef}
-          enablePan={false}
+          enablePan
           minDistance={4.8}
           maxDistance={10}
           minPolarAngle={Math.PI / 3.2}
           maxPolarAngle={Math.PI / 1.85}
+          screenSpacePanning
           target={CAMERA_TARGET}
         />
       </Canvas>

@@ -22,7 +22,8 @@ function App() {
               <h2>ポケット解剖図鑑</h2>
             </div>
             <p className="panel-hint">
-              ドラッグで回転 / ホイールでズーム / 番号ラベルをホバーでハイライト・クリックで詳細表示
+              左ドラッグで回転 / 右ドラッグで移動 / ホイールでズーム /
+              番号ラベルをホバーでハイライト・クリックで詳細表示
             </p>
           </div>
 
@@ -50,7 +51,7 @@ function App() {
             </h2>
             <p className="muscle-description">
               {selectedMuscle?.description ??
-                "番号ラベルをクリックすると、ここに筋肉名と説明を表示します。ホバー中はモデルだけハイライトされます。"}
+                "番号ラベルをクリックすると、ここに筋肉名と説明を表示します。筋肉や一覧のホバー中は対応する部位がハイライトされます。"}
             </p>
           </section>
 
@@ -59,12 +60,15 @@ function App() {
             <div className="muscle-list" role="list">
               {MUSCLES.map((muscle, index) => {
                 const isActive = muscle.id === selectedMuscleId;
+                const isHighlighted = muscle.id === highlightedMuscleId;
 
                 return (
                   <button
                     key={muscle.id}
                     type="button"
-                    className={`muscle-chip${isActive ? " is-active" : ""}`}
+                    className={`muscle-chip${isActive ? " is-active" : ""}${isHighlighted ? " is-highlighted" : ""}`}
+                    onPointerEnter={() => setHighlightedMuscleId(muscle.id)}
+                    onPointerLeave={() => setHighlightedMuscleId(null)}
                     onClick={() => setSelectedMuscleId(muscle.id)}
                   >
                     <span className="muscle-chip-label">

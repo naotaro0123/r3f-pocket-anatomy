@@ -6,14 +6,16 @@
 
 ## モデルアセットについて
 
-このリポジトリには 3D モデル本体を同梱していません。
+`public/models/` に BodyParts3D 4.0 を加工した Web 用モデルを同梱しています。初期状態では、このモデルに含まれる筋肉と頭蓋骨・顔面骨・歯を表示します。
 
-- デフォルトでは、リポジトリ内の簡易プロシージャル人体モデルを表示します
-- 再配布可能な独自モデルを使う場合は、ローカルに配置して環境変数で読み込み先を指定します
+- 450個のメッシュを6個のバイナリチャンクにまとめています
+- 非圧縮チャンクは圧縮ストリーム非対応環境向けのフォールバックです
+- データの出典、ライセンス、加工内容は [`public/models/ATTRIBUTION.md`](public/models/ATTRIBUTION.md) を参照してください
+- モデル変換・配信形式は [ashemag/human-atlas](https://github.com/ashemag/human-atlas) を参考にしています
 
-### 独自モデルを使う
+### モデルを差し替える
 
-`.env.local` を作成して、必要に応じて以下を設定します。
+別の glTF モデルを使う場合は `.env.local` を作成し、必要に応じて以下を設定します。
 
 ```bash
 VITE_MUSCLE_MODEL_URL=/models/your-model.glb
@@ -23,10 +25,8 @@ VITE_MUSCLE_MODEL_ROTATION_Z=0
 VITE_MUSCLE_MODEL_SCALE=0.01
 ```
 
-例:
-
 1. 再配布可能なモデルを `public/models/your-model.glb` に置く
-2. `.env.local` に `VITE_MUSCLE_MODEL_URL=/models/your-model.glb` を設定する
+2. `.env.local` に読み込み先と変換値を設定する
 3. `yarn dev` で確認する
 
 ## 開発

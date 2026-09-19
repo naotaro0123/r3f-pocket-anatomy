@@ -42,7 +42,7 @@ yarn preview
 - **`src/App.tsx`** が画面全体の composition root です。`selectedMuscleId` と `highlightedMuscleId` を持ち、Canvas と右側情報パネルの両方へ渡します。
 - **`src/data/muscles.ts`** が筋肉データの正本です。`MUSCLES` は一覧表示・詳細文・色・ラベル位置を兼ね、`MUSCLE_PARTS` は procedural fallback モデルの各メッシュ形状を定義します。
 - **`src/components/AnatomyCanvas.tsx`** は 3D シーン全体を担当します。カメラ視点プリセット、`OrbitControls` 制約、ライト、ラベルマーカー、選択中の callout をまとめて管理します。
-- **`src/components/MuscleModel.tsx`** は表示モデルの切り替え境界です。`VITE_MUSCLE_MODEL_URL` があれば glTF を読み込み、なければ `MUSCLE_PARTS` を使う procedural モデルにフォールバックします。
+- **`src/components/MuscleModel.tsx`** は表示モデルの切り替え境界です。デフォルトでは `public/models/atlas.json` を読み込み、`.json` なら BodyParts3D atlas、glTF URL なら glTF、URL が空なら `MUSCLE_PARTS` の procedural モデルを表示します。
 - glTF モードでは選択状態を emissive で見せ、procedural モードでは `MUSCLE_PARTS` の各メッシュに `MUSCLES` の色を適用して同じ選択 state を共有します。データ層・Canvas 層・モデル層が `MuscleId` で結び付いています。
 
 ## 実装上の重要な前提
@@ -65,9 +65,10 @@ yarn preview
 
 ## 3D モデルアセット
 
-- リポジトリには 3D モデル本体を同梱していません。
-- デフォルトでは簡易 procedural モデルを表示します。
-- 再配布可能な独自モデルを使う場合は、`public/models/` に配置して `.env.local` から `VITE_MUSCLE_MODEL_URL` を指定してください。
+- `public/models/` には BodyParts3D 4.0 由来の筋肉と頭部骨格モデルを同梱しています。
+- デフォルトでは `/models/atlas.json` と分割バイナリを読み込みます。
+- 出典、ライセンス、加工内容は `public/models/ATTRIBUTION.md` に記載しています。
+- 別の再配布可能なモデルを使う場合は、`public/models/` に配置して `.env.local` から `VITE_MUSCLE_MODEL_URL` を指定してください。
 
 ```bash
 VITE_MUSCLE_MODEL_URL=/models/your-model.glb
