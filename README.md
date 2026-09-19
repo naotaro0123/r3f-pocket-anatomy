@@ -13,22 +13,6 @@
 - データの出典、ライセンス、加工内容は [`public/models/ATTRIBUTION.md`](public/models/ATTRIBUTION.md) を参照してください
 - モデル変換・配信形式は [ashemag/human-atlas](https://github.com/ashemag/human-atlas) を参考にしています
 
-### モデルを差し替える
-
-別の glTF モデルを使う場合は `.env.local` を作成し、必要に応じて以下を設定します。
-
-```bash
-VITE_MUSCLE_MODEL_URL=/models/your-model.glb
-VITE_MUSCLE_MODEL_ROTATION_X=90
-VITE_MUSCLE_MODEL_ROTATION_Y=0
-VITE_MUSCLE_MODEL_ROTATION_Z=0
-VITE_MUSCLE_MODEL_SCALE=0.01
-```
-
-1. 再配布可能なモデルを `public/models/your-model.glb` に置く
-2. `.env.local` に読み込み先と変換値を設定する
-3. `yarn dev` で確認する
-
 ## 開発
 
 ```bash
