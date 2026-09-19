@@ -19,7 +19,7 @@ function App() {
         <div className="canvas-panel">
           <div className="panel-header">
             <div>
-              <h2>ポケット解剖図鑑</h2>
+              <h2>ポケット筋肉図鑑</h2>
             </div>
             <p className="panel-hint">
               左ドラッグで回転 / 右ドラッグで移動 / ホイールでズーム /
