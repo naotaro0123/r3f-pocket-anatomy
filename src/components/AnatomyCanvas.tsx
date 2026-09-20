@@ -1,7 +1,7 @@
 import { Billboard, Html, OrbitControls, Stats, Text } from "@react-three/drei";
+import type { ThreeEvent } from "@react-three/fiber";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import type { ThreeEvent } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { MUSCLES, type MuscleId } from "../data/muscles";
 import { MuscleModel } from "./MuscleModel";
@@ -273,7 +273,7 @@ export function AnatomyCanvas({
         <OrbitControls
           ref={controlsRef}
           enablePan
-          minDistance={4.8}
+          minDistance={2}
           maxDistance={10}
           minPolarAngle={Math.PI / 3.2}
           maxPolarAngle={Math.PI / 1.85}

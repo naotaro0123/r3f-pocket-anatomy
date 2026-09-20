@@ -45,6 +45,8 @@ const MODEL_ROTATION: RotationTuple = [
 const MODEL_SCALE = toNumber(import.meta.env.VITE_MUSCLE_MODEL_SCALE, 0.01);
 const MUSCLE_COLOR_BY_ID = new Map(MUSCLES.map((muscle) => [muscle.id, muscle.color]));
 const HIGHLIGHT_COLOR = "#fb7185";
+const HIGHLIGHT_BASE_COLOR = "#fda4af";
+const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
 
 function toNumber(value: string | undefined, fallback: number) {
   const parsed = Number(value);
@@ -66,8 +68,13 @@ function createMuscleMaterial(
   material.side = FrontSide;
   material.transparent = false;
   material.opacity = 1;
+  if (isSelected) {
+    material.color.set(HIGHLIGHT_BASE_COLOR);
+  }
   material.emissive.set(isSelected ? HIGHLIGHT_COLOR : "#000000");
-  material.emissiveIntensity = isSelected ? 0.85 : 0;
+  material.emissiveIntensity = isSelected ? HIGHLIGHT_EMISSIVE_INTENSITY : 0;
+  material.metalness = isSelected ? 0.08 : 0.05;
+  material.roughness = isSelected ? 0.28 : 0.42;
 
   return material;
 }
@@ -216,13 +223,19 @@ function ProceduralMuscleModel({
         >
           <MusclePartGeometry geometry={part.geometry} />
           <meshStandardMaterial
-            color={MUSCLE_COLOR_BY_ID.get(part.muscleId) ?? "#f8fafc"}
+            color={
+              part.muscleId === selectedMuscleId
+                ? HIGHLIGHT_BASE_COLOR
+                : (MUSCLE_COLOR_BY_ID.get(part.muscleId) ?? "#f8fafc")
+            }
             emissive={part.muscleId === selectedMuscleId ? HIGHLIGHT_COLOR : "#000000"}
-            emissiveIntensity={part.muscleId === selectedMuscleId ? 0.85 : 0}
+            emissiveIntensity={
+              part.muscleId === selectedMuscleId ? HIGHLIGHT_EMISSIVE_INTENSITY : 0
+            }
             transparent={false}
             opacity={1}
-            roughness={0.42}
-            metalness={0.05}
+            roughness={part.muscleId === selectedMuscleId ? 0.28 : 0.42}
+            metalness={part.muscleId === selectedMuscleId ? 0.08 : 0.05}
           />
         </mesh>
       ))}

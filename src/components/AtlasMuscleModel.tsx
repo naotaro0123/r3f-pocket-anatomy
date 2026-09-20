@@ -49,6 +49,8 @@ type GeometryGroup = {
 };
 
 const HIGHLIGHT_COLOR = "#fb7185";
+const HIGHLIGHT_BASE_COLOR = "#fda4af";
+const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
 const DEFAULT_MUSCLE_COLOR = "#a85b50";
 const OTHER_GROUP = "__other";
 const SYSTEM_COLORS: Record<string, string> = {
@@ -287,16 +289,18 @@ export function AtlasMuscleModel({
           >
             <meshStandardMaterial
               color={
-                muscleId
-                  ? (MUSCLE_COLOR_BY_ID.get(muscleId) ?? DEFAULT_MUSCLE_COLOR)
-                  : (SYSTEM_COLORS[system] ?? "#aebbb8")
+                isSelected
+                  ? HIGHLIGHT_BASE_COLOR
+                  : muscleId
+                    ? (MUSCLE_COLOR_BY_ID.get(muscleId) ?? DEFAULT_MUSCLE_COLOR)
+                    : (SYSTEM_COLORS[system] ?? "#aebbb8")
               }
               depthWrite={!isBodySurface}
               emissive={isSelected ? HIGHLIGHT_COLOR : "#000000"}
-              emissiveIntensity={isSelected ? 0.85 : 0}
-              metalness={0.04}
+              emissiveIntensity={isSelected ? HIGHLIGHT_EMISSIVE_INTENSITY : 0}
+              metalness={isSelected ? 0.08 : 0.04}
               opacity={isBodySurface ? 0.1 : 1}
-              roughness={0.58}
+              roughness={isSelected ? 0.28 : 0.58}
               side={DoubleSide}
               transparent={isBodySurface}
             />

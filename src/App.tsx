@@ -8,9 +8,9 @@ function App() {
   const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(null);
   const [highlightedMuscleId, setHighlightedMuscleId] = useState<MuscleId | null>(null);
 
-  const selectedMuscle = useMemo(
-    () => MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null,
-    [selectedMuscleId],
+  const displayedMuscle = useMemo(
+    () => MUSCLES.find((muscle) => muscle.id === (highlightedMuscleId ?? selectedMuscleId)) ?? null,
+    [highlightedMuscleId, selectedMuscleId],
   );
 
   return (
@@ -39,10 +39,10 @@ function App() {
           <section className="info-card info-card-detail">
             <p className="panel-label">筋肉を選択して下さい。</p>
             <h2>
-              {selectedMuscle ? (
+              {displayedMuscle ? (
                 <MuscleNameRuby
-                  name={selectedMuscle.name}
-                  reading={selectedMuscle.reading}
+                  name={displayedMuscle.name}
+                  reading={displayedMuscle.reading}
                   className="muscle-name-ruby muscle-name-ruby-heading"
                 />
               ) : (
@@ -50,7 +50,7 @@ function App() {
               )}
             </h2>
             <p className="muscle-description">
-              {selectedMuscle?.description ??
+              {displayedMuscle?.description ??
                 "番号ラベルをクリックすると、ここに筋肉名と説明を表示します。筋肉や一覧のホバー中は対応する部位がハイライトされます。"}
             </p>
           </section>
