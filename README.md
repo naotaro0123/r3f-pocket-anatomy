@@ -4,6 +4,8 @@
 
 開発ステータス: 進行中
 
+![image](https://github.com/user-attachments/assets/6a894163-94fd-4726-962d-9d6fce1e4a2e)
+
 ## モデルアセットについて
 
 `public/models/` に BodyParts3D 4.0 を加工した Web 用モデルを同梱しています。初期状態では、このモデルに含まれる筋肉と頭蓋骨・顔面骨・歯を表示します。
