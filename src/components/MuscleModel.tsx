@@ -9,7 +9,12 @@ import {
   type SkinnedMesh,
 } from "three";
 import { SkeletonUtils, type GLTF } from "three-stdlib";
-import { MUSCLES, MUSCLE_PARTS, type MuscleId } from "../data/muscles";
+import {
+  GLTF_HIGHLIGHTABLE_MUSCLE_IDS,
+  MUSCLES,
+  MUSCLE_PARTS,
+  type MuscleId,
+} from "../data/muscles";
 import { AtlasMuscleModel } from "./AtlasMuscleModel";
 
 type MuscleModelProps = ThreeElements["group"] & {
@@ -17,27 +22,13 @@ type MuscleModelProps = ThreeElements["group"] & {
   selectedMuscleId?: MuscleId | null;
 };
 type RotationTuple = [number, number, number];
-const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
-  "Muscle_Chest",
-  "Muscle_Deltoid",
-  "Muscle_Biceps",
-  "Muscle_Abs",
-  "Muscle_Obliques",
-  "Muscle_Quads",
-  "Muscle_TibialisAnterior",
-  "Muscle_Trapezius",
-  "Muscle_LatissimusDorsi",
-  "Muscle_TricepsBrachii",
-  "Muscle_GluteusMaximus",
-] as const satisfies readonly MuscleId[];
-type GltfHighlightableMuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
 type GLTFResult = GLTF & {
   nodes: {
     mixamorigHips: Bone;
     Alpha_Joints: SkinnedMesh;
     Alpha_Surface: SkinnedMesh;
     // 下記のMaterialはAlpha_Body_MATを共有
-  } & Record<GltfHighlightableMuscleId, SkinnedMesh>;
+  } & Record<MuscleId, SkinnedMesh>;
   materials: {
     Alpha_Joints_MAT: MeshStandardMaterial;
     Alpha_Body_MAT: MeshStandardMaterial;
@@ -111,7 +102,7 @@ function HostedMuscleModel({ onHighlightMuscle, selectedMuscleId, ...props }: Mu
           muscleId,
           createMuscleMaterial(materials.Alpha_Body_MAT, muscleId, selectedMuscleId),
         ]),
-      ) as Record<GltfHighlightableMuscleId, MeshStandardMaterial>,
+      ) as Record<MuscleId, MeshStandardMaterial>,
     };
   }, [materials, selectedMuscleId]);
 

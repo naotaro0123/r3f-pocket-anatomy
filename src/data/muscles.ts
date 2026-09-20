@@ -1,16 +1,19 @@
-export type MuscleId =
-  | "Muscle_Chest" // 大胸筋
-  | "Muscle_Deltoid" // 三角筋
-  | "Muscle_Biceps" // 上腕二頭筋
-  | "Muscle_ForearmFlexors" // 前腕屈筋群
-  | "Muscle_Abs" // 腹直筋
-  | "Muscle_Obliques" // 腹斜筋
-  | "Muscle_Quads" // 大腿四頭筋
-  | "Muscle_TibialisAnterior" // 前脛骨筋
-  | "Muscle_Trapezius" // 僧帽筋
-  | "Muscle_LatissimusDorsi" // 広背筋
-  | "Muscle_TricepsBrachii" // 上腕三頭筋
-  | "Muscle_GluteusMaximus"; // 大殿筋
+export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
+  "Muscle_Chest", // 大胸筋
+  "Muscle_Deltoid", // 三角筋
+  "Muscle_Biceps", // 上腕二頭筋
+  "Muscle_ForearmFlexors", // 前腕屈筋群
+  "Muscle_Abs", // 腹直筋
+  "Muscle_Obliques", // 腹斜筋
+  "Muscle_Quads", // 大腿四頭筋
+  "Muscle_TibialisAnterior", // 前脛骨筋
+  "Muscle_Trapezius", // 僧帽筋
+  "Muscle_LatissimusDorsi", // 広背筋
+  "Muscle_TricepsBrachii", // 上腕三頭筋
+  "Muscle_GluteusMaximus", // 大殿筋
+] as const;
+
+export type MuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
 
 type MuscleDefinition = {
   id: MuscleId;
@@ -56,6 +59,14 @@ export const MUSCLES: MuscleDefinition[] = [
     description: "肘関節の屈曲と前腕の回外に関わる、上腕前面の代表的な筋です。",
     color: "#fb7185",
     labelPosition: [0.7, 3.38, 0.05],
+  },
+  {
+    id: "Muscle_ForearmFlexors",
+    name: "前腕屈筋群",
+    reading: "ぜんわんくっきんぐん",
+    description: "前腕の手のひら側にある筋群で、手首や指を曲げる動きに関わります。",
+    color: "#06b6d4",
+    labelPosition: [0.82, 2.68, 0.05],
   },
   {
     id: "Muscle_Abs",
