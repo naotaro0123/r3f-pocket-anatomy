@@ -38,7 +38,7 @@ const CAMERA_PRESETS = {
   },
   topRight: {
     label: "クォータービュー",
-    position: [6.1, 3.05, 6.1] as [number, number, number],
+    position: [6.1, 3.05, 4.8] as [number, number, number],
   },
 } as const;
 

@@ -79,6 +79,7 @@ const CONCEPT_IDS_BY_MUSCLE_ID: Partial<Record<MuscleId, readonly string[]>> = {
   Muscle_Quads: ["FMA22429"],
   Muscle_TibialisAnterior: ["FMA22532"],
   Muscle_Trapezius: ["FMA32529"],
+  Muscle_LatissimusDorsi: ["FMA13379", "FMA13402", "FMA22702", "FMA22703", "FMA22709"],
   Muscle_TricepsBrachii: ["FMA37692", "FMA37693", "FMA37694"],
   Muscle_GluteusMaximus: ["FMA22314"],
 };
@@ -260,10 +261,13 @@ export function AtlasMuscleModel({
     );
   }
 
+  const highlightedMuscleId =
+    selectedMuscleId === "Muscle_Abs" ? "Muscle_Obliques" : selectedMuscleId;
+
   return (
     <group {...props}>
       {geometryGroups.map(({ geometry, key, muscleId, system }) => {
-        const isSelected = muscleId !== null && muscleId === selectedMuscleId;
+        const isSelected = muscleId !== null && muscleId === highlightedMuscleId;
         const isBodySurface = system === "integumentary";
 
         return (
