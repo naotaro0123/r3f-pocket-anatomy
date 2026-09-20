@@ -36,7 +36,21 @@ type GLTFResult = GLTF & {
 };
 type MuscleGraph = Pick<GLTFResult, "nodes" | "materials">;
 
-const MODEL_URL = import.meta.env.VITE_MUSCLE_MODEL_URL?.trim() || "/models/atlas.json";
+function resolveModelUrl(value: string | undefined) {
+  const configuredUrl = value?.trim();
+  if (!configuredUrl) {
+    return `${import.meta.env.BASE_URL}models/atlas.json`;
+  }
+  if (
+    configuredUrl.startsWith(import.meta.env.BASE_URL) ||
+    /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(configuredUrl)
+  ) {
+    return configuredUrl;
+  }
+  return `${import.meta.env.BASE_URL}${configuredUrl.replace(/^\/+/, "")}`;
+}
+
+const MODEL_URL = resolveModelUrl(import.meta.env.VITE_MUSCLE_MODEL_URL);
 const MODEL_ROTATION: RotationTuple = [
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_X, 90),
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_Y, 0),

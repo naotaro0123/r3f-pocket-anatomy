@@ -106,6 +106,12 @@ async function decodeModelResponse(response: Response, expectedBytes: number, co
   return buffer;
 }
 
+function resolveAtlasAssetUrl(assetUrl: string, atlasUrl: string) {
+  const atlasDirectoryUrl = new URL(".", atlasUrl);
+  const path = assetUrl.startsWith("/models/") ? assetUrl.slice("/models/".length) : assetUrl;
+  return new URL(path, atlasDirectoryUrl).toString();
+}
+
 function mapPartsToMuscles(atlas: Atlas) {
   const concepts = new Map(atlas.concepts.map((concept) => [concept.id, concept.elements]));
   const muscleByPartId = new Map<string, MuscleId>();
@@ -161,7 +167,8 @@ async function loadAtlasGeometries(url: string, signal: AbortSignal) {
       [...partsByChunk].map(async ([chunkIndex, parts]) => {
         const chunk = atlas.chunks[chunkIndex];
         const useGzip = Boolean(chunk.gzip && typeof DecompressionStream !== "undefined");
-        const response = await fetch(useGzip ? chunk.gzip! : chunk.url, { signal });
+        const assetUrl = resolveAtlasAssetUrl(useGzip ? chunk.gzip! : chunk.url, atlasResponse.url);
+        const response = await fetch(assetUrl, { signal });
         const buffer = await decodeModelResponse(response, chunk.bytes, useGzip);
 
         for (const part of parts) {

@@ -66,12 +66,12 @@ yarn preview
 ## 3D モデルアセット
 
 - `public/models/` には BodyParts3D 4.0 由来の筋肉と頭部骨格モデルを同梱しています。
-- デフォルトでは `/models/atlas.json` と分割バイナリを読み込みます。
+- デフォルトでは Vite の `BASE_URL` 配下にある `models/atlas.json` と分割バイナリを読み込みます。
 - 出典、ライセンス、加工内容は `public/models/ATTRIBUTION.md` に記載しています。
 - 別の再配布可能なモデルを使う場合は、`public/models/` に配置して `.env.local` から `VITE_MUSCLE_MODEL_URL` を指定してください。
 
 ```bash
-VITE_MUSCLE_MODEL_URL=/models/your-model.glb
+VITE_MUSCLE_MODEL_URL=models/your-model.glb
 VITE_MUSCLE_MODEL_ROTATION_X=90
 VITE_MUSCLE_MODEL_ROTATION_Y=0
 VITE_MUSCLE_MODEL_ROTATION_Z=0
