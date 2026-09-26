@@ -9,12 +9,7 @@ import {
   type SkinnedMesh,
 } from "three";
 import { SkeletonUtils, type GLTF } from "three-stdlib";
-import {
-  GLTF_HIGHLIGHTABLE_MUSCLE_IDS,
-  MUSCLES,
-  MUSCLE_PARTS,
-  type MuscleId,
-} from "../data/muscles";
+import { GLTF_HIGHLIGHTABLE_MUSCLE_IDS, type MuscleId } from "../data/muscles";
 import { AtlasMuscleModel } from "./AtlasMuscleModel";
 
 type MuscleModelProps = ThreeElements["group"] & {
@@ -66,7 +61,6 @@ const MODEL_ROTATION: RotationTuple = [
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_Z, 0),
 ];
 const MODEL_SCALE = toNumber(import.meta.env.VITE_MUSCLE_MODEL_SCALE, 0.01);
-const MUSCLE_COLOR_BY_ID = new Map(MUSCLES.map((muscle) => [muscle.id, muscle.color]));
 const HIGHLIGHT_COLOR = "#fb7185";
 const HIGHLIGHT_BASE_COLOR = "#fda4af";
 const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
@@ -91,14 +85,6 @@ const createMuscleMaterial = (
   material.roughness = isSelected ? 0.28 : 0.42;
 
   return material;
-};
-
-const MusclePartGeometry = ({ geometry }: { geometry: "box" | "capsule" }) => {
-  return geometry === "capsule" ? (
-    <capsuleGeometry args={[0.38, 1, 8, 16]} />
-  ) : (
-    <boxGeometry args={[1, 1, 1]} />
-  );
 };
 
 const HostedMuscleModel = ({ onHighlightMuscle, selectedMuscleId, ...props }: MuscleModelProps) => {
@@ -183,90 +169,16 @@ const HostedMuscleModel = ({ onHighlightMuscle, selectedMuscleId, ...props }: Mu
   );
 };
 
-const ProceduralMuscleModel = ({
-  onHighlightMuscle,
-  selectedMuscleId,
-  ...props
-}: MuscleModelProps) => {
-  return (
-    <group {...props}>
-      <mesh position={[0, 3.2, 0]} castShadow receiveShadow>
-        <sphereGeometry args={[0.3, 32, 32]} />
-        <meshStandardMaterial color="#cbd5e1" roughness={0.62} metalness={0.05} />
-      </mesh>
-
-      <mesh position={[0, 2.05, 0]} castShadow receiveShadow>
-        <capsuleGeometry args={[0.46, 1.55, 10, 18]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.72} metalness={0.04} />
-      </mesh>
-
-      <mesh position={[-0.92, 2.08, 0]} rotation={[0, 0, -0.18]} castShadow receiveShadow>
-        <capsuleGeometry args={[0.18, 1.15, 8, 16]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.72} metalness={0.04} />
-      </mesh>
-      <mesh position={[0.92, 2.08, 0]} rotation={[0, 0, 0.18]} castShadow receiveShadow>
-        <capsuleGeometry args={[0.18, 1.15, 8, 16]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.72} metalness={0.04} />
-      </mesh>
-
-      <mesh position={[-0.34, 0.48, 0]} rotation={[0, 0, 0.04]} castShadow receiveShadow>
-        <capsuleGeometry args={[0.2, 1.65, 8, 16]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.72} metalness={0.04} />
-      </mesh>
-      <mesh position={[0.34, 0.48, 0]} rotation={[0, 0, -0.04]} castShadow receiveShadow>
-        <capsuleGeometry args={[0.2, 1.65, 8, 16]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.72} metalness={0.04} />
-      </mesh>
-
-      {MUSCLE_PARTS.map((part) => (
-        <mesh
-          key={part.id}
-          position={part.position}
-          rotation={part.rotation}
-          scale={part.scale}
-          castShadow
-          receiveShadow
-          onPointerOver={(event: ThreeEvent<PointerEvent>) => {
-            event.stopPropagation();
-            onHighlightMuscle?.(part.muscleId);
-          }}
-          onPointerOut={(event: ThreeEvent<PointerEvent>) => {
-            event.stopPropagation();
-            onHighlightMuscle?.(null);
-          }}
-        >
-          <MusclePartGeometry geometry={part.geometry} />
-          <meshStandardMaterial
-            color={
-              part.muscleId === selectedMuscleId
-                ? HIGHLIGHT_BASE_COLOR
-                : (MUSCLE_COLOR_BY_ID.get(part.muscleId) ?? "#f8fafc")
-            }
-            emissive={part.muscleId === selectedMuscleId ? HIGHLIGHT_COLOR : "#000000"}
-            emissiveIntensity={
-              part.muscleId === selectedMuscleId ? HIGHLIGHT_EMISSIVE_INTENSITY : 0
-            }
-            transparent={false}
-            opacity={1}
-            roughness={part.muscleId === selectedMuscleId ? 0.28 : 0.42}
-            metalness={part.muscleId === selectedMuscleId ? 0.08 : 0.05}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-};
-
 export const MuscleModel = (props: MuscleModelProps) => {
   if (MODEL_URL.endsWith(".json")) {
     return <AtlasMuscleModel {...props} url={MODEL_URL} />;
   }
 
-  return MODEL_URL ? <HostedMuscleModel {...props} /> : <ProceduralMuscleModel {...props} />;
+  return <HostedMuscleModel {...props} />;
 };
 
 export { MuscleModel as Model };
 
-if (MODEL_URL && !MODEL_URL.endsWith(".json")) {
+if (!MODEL_URL.endsWith(".json")) {
   useGLTF.preload(MODEL_URL);
 }

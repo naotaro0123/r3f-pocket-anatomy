@@ -40,18 +40,18 @@ yarn preview
 ## 高レベルアーキテクチャ
 
 - **`src/App.tsx`** が画面全体の composition root です。`selectedMuscleId` と `highlightedMuscleId` を持ち、Canvas と右側情報パネルの両方へ渡します。
-- **`src/data/muscles.ts`** が筋肉データの正本です。`MUSCLES` は一覧表示・詳細文・色・ラベル位置を兼ね、`MUSCLE_PARTS` は procedural fallback モデルの各メッシュ形状を定義します。
+- **`src/data/muscles.ts`** が筋肉データの正本です。`MUSCLES` は一覧表示・詳細文・色・ラベル位置を定義します。
 - **`src/components/AnatomyCanvas.tsx`** は 3D シーン全体を担当します。カメラ視点プリセット、`OrbitControls` 制約、ライト、ラベルマーカー、選択中の callout をまとめて管理します。
-- **`src/components/MuscleModel.tsx`** は表示モデルの切り替え境界です。デフォルトでは `public/models/atlas.json` を読み込み、`.json` なら BodyParts3D atlas、glTF URL なら glTF、URL が空なら `MUSCLE_PARTS` の procedural モデルを表示します。
-- glTF モードでは選択状態を emissive で見せ、procedural モードでは `MUSCLE_PARTS` の各メッシュに `MUSCLES` の色を適用して同じ選択 state を共有します。データ層・Canvas 層・モデル層が `MuscleId` で結び付いています。
+- **`src/components/MuscleModel.tsx`** は表示モデルの切り替え境界です。デフォルトでは `public/models/atlas.json` を読み込み、`.json` なら BodyParts3D atlas、それ以外の URL なら glTF を表示します。
+- glTF モードでは選択状態を emissive で見せます。データ層・Canvas 層・モデル層が `MuscleId` で結び付いています。
 
 ## 実装上の重要な前提
 
 - 初期状態は `selectedMuscleId = null` です。未選択状態を前提に UI を壊さないようにしてください。
 - hover と click は別 state です。Canvas 側では `highlightedMuscleId ?? selectedMuscleId` をモデル強調に使っているため、hover 表現を変えるときは選択状態との優先順位も確認してください。
-- 右側の筋肉一覧、Canvas 上の番号ラベル、選択中の詳細文はすべて `MUSCLES` の配列順と `id` に依存しています。筋肉を追加・削除する場合は、一覧だけでなくラベル位置・fallback 形状・モデル側の highlight 対応までそろえて更新してください。
+- 右側の筋肉一覧、Canvas 上の番号ラベル、選択中の詳細文はすべて `MUSCLES` の配列順と `id` に依存しています。筋肉を追加・削除する場合は、一覧だけでなくラベル位置・モデル側の highlight 対応までそろえて更新してください。
 - 外部モデルの向きと倍率は `VITE_MUSCLE_MODEL_ROTATION_X/Y/Z` と `VITE_MUSCLE_MODEL_SCALE` で吸収する設計です。モデルの見え方調整は、まず env 変数かカメラ設定で吸収し、他の UI 座標系に影響する場当たり的な transform 変更は避けてください。
-- 現在の glTF 実装で個別 highlight 対応しているのは `Muscle_Chest` / `Muscle_Biceps` / `Muscle_Abs` / `Muscle_Quads` です。`MUSCLES` 側へ筋肉を増やしても、glTF ノードが無ければ procedural fallback ほど細かくは光りません。
+- `MUSCLES` 側へ筋肉を増やす場合は、atlas の concept mapping または対応する glTF ノードも更新してください。
 
 ## コードベース固有の慣習
 
