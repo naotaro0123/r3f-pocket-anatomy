@@ -36,7 +36,7 @@ type GLTFResult = GLTF & {
 };
 type MuscleGraph = Pick<GLTFResult, "nodes" | "materials">;
 
-function resolveModelUrl(value: string | undefined) {
+const resolveModelUrl = (value: string | undefined) => {
   const configuredUrl = value?.trim();
   if (!configuredUrl) {
     return `${import.meta.env.BASE_URL}models/atlas.json`;
@@ -48,7 +48,16 @@ function resolveModelUrl(value: string | undefined) {
     return configuredUrl;
   }
   return `${import.meta.env.BASE_URL}${configuredUrl.replace(/^\/+/, "")}`;
-}
+};
+
+const toNumber = (value: string | undefined, fallback: number) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const toRadians = (value: string | undefined, fallbackDegrees: number) => {
+  return (toNumber(value, fallbackDegrees) * Math.PI) / 180;
+};
 
 const MODEL_URL = resolveModelUrl(import.meta.env.VITE_MUSCLE_MODEL_URL);
 const MODEL_ROTATION: RotationTuple = [
@@ -62,20 +71,11 @@ const HIGHLIGHT_COLOR = "#fb7185";
 const HIGHLIGHT_BASE_COLOR = "#fda4af";
 const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
 
-function toNumber(value: string | undefined, fallback: number) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
-}
-
-function toRadians(value: string | undefined, fallbackDegrees: number) {
-  return (toNumber(value, fallbackDegrees) * Math.PI) / 180;
-}
-
-function createMuscleMaterial(
+const createMuscleMaterial = (
   baseMaterial: MeshStandardMaterial,
   muscleId: MuscleId,
   selectedMuscleId: MuscleId | null | undefined,
-) {
+) => {
   const material = baseMaterial.clone();
   const isSelected = muscleId === selectedMuscleId;
 
@@ -91,17 +91,17 @@ function createMuscleMaterial(
   material.roughness = isSelected ? 0.28 : 0.42;
 
   return material;
-}
+};
 
-function MusclePartGeometry({ geometry }: { geometry: "box" | "capsule" }) {
+const MusclePartGeometry = ({ geometry }: { geometry: "box" | "capsule" }) => {
   return geometry === "capsule" ? (
     <capsuleGeometry args={[0.38, 1, 8, 16]} />
   ) : (
     <boxGeometry args={[1, 1, 1]} />
   );
-}
+};
 
-function HostedMuscleModel({ onHighlightMuscle, selectedMuscleId, ...props }: MuscleModelProps) {
+const HostedMuscleModel = ({ onHighlightMuscle, selectedMuscleId, ...props }: MuscleModelProps) => {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF(MODEL_URL) as GLTF;
   const clone = useMemo(() => SkeletonUtils.clone(scene), [scene]);
@@ -181,13 +181,13 @@ function HostedMuscleModel({ onHighlightMuscle, selectedMuscleId, ...props }: Mu
       </group>
     </group>
   );
-}
+};
 
-function ProceduralMuscleModel({
+const ProceduralMuscleModel = ({
   onHighlightMuscle,
   selectedMuscleId,
   ...props
-}: MuscleModelProps) {
+}: MuscleModelProps) => {
   return (
     <group {...props}>
       <mesh position={[0, 3.2, 0]} castShadow receiveShadow>
@@ -255,15 +255,15 @@ function ProceduralMuscleModel({
       ))}
     </group>
   );
-}
+};
 
-export function MuscleModel(props: MuscleModelProps) {
+export const MuscleModel = (props: MuscleModelProps) => {
   if (MODEL_URL.endsWith(".json")) {
     return <AtlasMuscleModel {...props} url={MODEL_URL} />;
   }
 
   return MODEL_URL ? <HostedMuscleModel {...props} /> : <ProceduralMuscleModel {...props} />;
-}
+};
 
 export { MuscleModel as Model };
 

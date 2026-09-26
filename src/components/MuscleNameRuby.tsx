@@ -4,11 +4,11 @@ type MuscleNameRubyProps = {
   className?: string;
 };
 
-export function MuscleNameRuby({ name, reading, className }: MuscleNameRubyProps) {
+export const MuscleNameRuby = ({ name, reading, className }: MuscleNameRubyProps) => {
   return (
     <ruby className={className}>
       {name}
       <rt>{reading}</rt>
     </ruby>
   );
-}
+};

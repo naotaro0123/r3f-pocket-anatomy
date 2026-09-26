@@ -44,7 +44,7 @@ const CAMERA_PRESETS = {
 
 type CameraPresetKey = keyof typeof CAMERA_PRESETS;
 
-function MuscleMarker({
+const MuscleMarker = ({
   index,
   isActive,
   isHighlighted,
@@ -60,7 +60,7 @@ function MuscleMarker({
   onHighlightMuscle: (muscleId: MuscleId | null) => void;
   position: [number, number, number];
   onSelectMuscle: (muscleId: MuscleId) => void;
-}) {
+}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleSelect = (event: ThreeEvent<MouseEvent>) => {
@@ -123,9 +123,9 @@ function MuscleMarker({
       </group>
     </Billboard>
   );
-}
+};
 
-function AnatomyModel({
+const AnatomyModel = ({
   highlightedMuscleId,
   selectedMuscleId,
   onHighlightMuscle,
@@ -135,7 +135,7 @@ function AnatomyModel({
   selectedMuscleId: MuscleId | null;
   onHighlightMuscle: (muscleId: MuscleId | null) => void;
   onSelectMuscle: (muscleId: MuscleId) => void;
-}) {
+}) => {
   const selectedMuscle = selectedMuscleId
     ? (MUSCLES.find((muscle) => muscle.id === selectedMuscleId) ?? null)
     : null;
@@ -187,15 +187,15 @@ function AnatomyModel({
       ) : null}
     </group>
   );
-}
+};
 
-function CameraPresetController({
+const CameraPresetController = ({
   controlsRef,
   preset,
 }: {
   controlsRef: React.RefObject<OrbitControlsImpl | null>;
   preset: CameraPresetKey;
-}) {
+}) => {
   const { camera } = useThree();
 
   useEffect(() => {
@@ -212,14 +212,14 @@ function CameraPresetController({
   }, [camera, controlsRef, preset]);
 
   return null;
-}
+};
 
-export function AnatomyCanvas({
+export const AnatomyCanvas = ({
   highlightedMuscleId,
   selectedMuscleId,
   onHighlightMuscle,
   onSelectMuscle,
-}: AnatomyCanvasProps) {
+}: AnatomyCanvasProps) => {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const [cameraPreset, setCameraPreset] = useState<CameraPresetKey>("front");
   const [statsParent, setStatsParent] = useState<HTMLDivElement | null>(null);
@@ -283,4 +283,4 @@ export function AnatomyCanvas({
       </Canvas>
     </div>
   );
-}
+};

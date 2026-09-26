@@ -4,7 +4,7 @@ import { AnatomyCanvas } from "./components/AnatomyCanvas";
 import { MuscleNameRuby } from "./components/MuscleNameRuby";
 import { type MuscleId, MUSCLES } from "./data/muscles";
 
-function App() {
+const App = () => {
   const [selectedMuscleId, setSelectedMuscleId] = useState<MuscleId | null>(null);
   const [highlightedMuscleId, setHighlightedMuscleId] = useState<MuscleId | null>(null);
 
@@ -88,6 +88,6 @@ function App() {
       </section>
     </main>
   );
-}
+};
 
 export default App;

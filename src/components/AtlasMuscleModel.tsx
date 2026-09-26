@@ -85,7 +85,11 @@ const CONCEPT_IDS_BY_MUSCLE_ID: Partial<Record<MuscleId, readonly string[]>> = {
 };
 const MUSCLE_COLOR_BY_ID = new Map(MUSCLES.map((muscle) => [muscle.id, muscle.color]));
 
-async function decodeModelResponse(response: Response, expectedBytes: number, compressed: boolean) {
+const decodeModelResponse = async (
+  response: Response,
+  expectedBytes: number,
+  compressed: boolean,
+) => {
   if (!response.ok) {
     throw new Error(`解剖モデルを読み込めませんでした (${response.status})。`);
   }
@@ -104,15 +108,15 @@ async function decodeModelResponse(response: Response, expectedBytes: number, co
   }
 
   return buffer;
-}
+};
 
-function resolveAtlasAssetUrl(assetUrl: string, atlasUrl: string) {
+const resolveAtlasAssetUrl = (assetUrl: string, atlasUrl: string) => {
   const atlasDirectoryUrl = new URL(".", atlasUrl);
   const path = assetUrl.startsWith("/models/") ? assetUrl.slice("/models/".length) : assetUrl;
   return new URL(path, atlasDirectoryUrl).toString();
-}
+};
 
-function mapPartsToMuscles(atlas: Atlas) {
+const mapPartsToMuscles = (atlas: Atlas) => {
   const concepts = new Map(atlas.concepts.map((concept) => [concept.id, concept.elements]));
   const muscleByPartId = new Map<string, MuscleId>();
 
@@ -128,9 +132,9 @@ function mapPartsToMuscles(atlas: Atlas) {
   }
 
   return muscleByPartId;
-}
+};
 
-function isHeadSkeleton(part: AtlasPart) {
+const isHeadSkeleton = (part: AtlasPart) => {
   if (part.system !== "skeletal" || part.bounds[0][1] < 1.4) {
     return false;
   }
@@ -140,9 +144,9 @@ function isHeadSkeleton(part: AtlasPart) {
     part.name !== "Atlas" &&
     part.name !== "Axis"
   );
-}
+};
 
-async function loadAtlasGeometries(url: string, signal: AbortSignal) {
+const loadAtlasGeometries = async (url: string, signal: AbortSignal) => {
   const atlasResponse = await fetch(url, { signal });
   if (!atlasResponse.ok) {
     throw new Error(`解剖モデルのカタログを読み込めませんでした (${atlasResponse.status})。`);
@@ -218,14 +222,14 @@ async function loadAtlasGeometries(url: string, signal: AbortSignal) {
       geometries.forEach((geometry) => geometry.dispose());
     }
   }
-}
+};
 
-export function AtlasMuscleModel({
+export const AtlasMuscleModel = ({
   onHighlightMuscle,
   selectedMuscleId,
   url,
   ...props
-}: AtlasMuscleModelProps) {
+}: AtlasMuscleModelProps) => {
   const [geometryGroups, setGeometryGroups] = useState<GeometryGroup[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -320,4 +324,4 @@ export function AtlasMuscleModel({
       })}
     </group>
   );
-}
+};
