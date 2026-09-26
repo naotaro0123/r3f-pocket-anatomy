@@ -1,4 +1,4 @@
-export const MUSCLE_IDS = [
+export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
   "Muscle_Chest", // 大胸筋
   "Muscle_Deltoid", // 三角筋
   "Muscle_Biceps", // 上腕二頭筋
@@ -11,14 +11,17 @@ export const MUSCLE_IDS = [
   "Muscle_LatissimusDorsi", // 広背筋
   "Muscle_TricepsBrachii", // 上腕三頭筋
   "Muscle_GluteusMaximus", // 大殿筋
+] as const;
+
+export const MUSCLE_IDS = [
+  ...GLTF_HIGHLIGHTABLE_MUSCLE_IDS,
   "Muscle_Platysma", // 広頸筋
+  "Muscle_Soleus", // ヒラメ筋
+  "Muscle_BicepsFemoris", // 大腿二頭筋
+  "Muscle_Gastrocnemius", // 腓腹筋
 ] as const;
 
 export type MuscleId = (typeof MUSCLE_IDS)[number];
-
-export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = MUSCLE_IDS.filter(
-  (muscleId) => muscleId !== "Muscle_Platysma",
-);
 
 type MuscleDefinition = {
   id: MuscleId;
@@ -94,7 +97,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "ぜんけいこつきん",
     description: "足首を持ち上げる背屈に関わり、歩行時につま先をクリアに保つ下腿前面の筋です。",
     color: "#f43f5e",
-    labelPosition: [0.44, 0.98, -0.18],
+    labelPosition: [0.44, 1.4, -0.18],
   },
   {
     id: "Muscle_Trapezius",
@@ -136,5 +139,29 @@ export const MUSCLES: MuscleDefinition[] = [
       "首の前面から下顎に広がる薄い筋で、首の皮膚を緊張させ、下顎を下げる動きを助けます。",
     color: "#0ea5e9",
     labelPosition: [-0.2, 3.65, -0.14],
+  },
+  {
+    id: "Muscle_Soleus",
+    name: "ヒラメ筋",
+    reading: "ひらめきん",
+    description: "ふくらはぎの深部にある筋で、足首を伸ばす動きや立位姿勢の維持に関わります。",
+    color: "#84cc16",
+    labelPosition: [0.32, 0.9, -0.28],
+  },
+  {
+    id: "Muscle_BicepsFemoris",
+    name: "大腿二頭筋",
+    reading: "だいたいにとうきん",
+    description: "大腿後面にある筋で、膝関節の屈曲や股関節の伸展に関わります。",
+    color: "#f97316",
+    labelPosition: [-0.22, 2.1, -0.44],
+  },
+  {
+    id: "Muscle_Gastrocnemius",
+    name: "腓腹筋",
+    reading: "ひふくきん",
+    description: "ふくらはぎの表層にある筋で、足首を伸ばす動きや膝関節の屈曲を助けます。",
+    color: "#ef4444",
+    labelPosition: [-0.18, 1.52, -0.46],
   },
 ];
