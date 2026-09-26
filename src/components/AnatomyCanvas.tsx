@@ -253,8 +253,8 @@ export const AnatomyCanvas = ({
         }}
       >
         {statsParentRef ? <Stats parent={statsParentRef} className="canvas-stats" /> : null}
-        <color attach="background" args={["#87ceeb"]} />
-        <fog attach="fog" args={["#87ceeb", 8, 14]} />
+        <color attach="background" args={["#60a5fa"]} />
+        <fog attach="fog" args={["#60a5fa", 8, 14]} />
         <ambientLight intensity={0.9} />
         <directionalLight intensity={2.8} position={[4, 7, 4]} />
         <pointLight intensity={18} position={[-4, 2, 2]} color="#60a5fa" />

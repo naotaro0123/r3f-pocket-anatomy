@@ -2,7 +2,7 @@
 
 ポケット筋肉図鑑。筋肉パーツをクリックして筋肉名を表示、解説します。
 
-開発ステータス: 進行中
+開発ステータス: 一旦完了
 
 ![image](https://github.com/user-attachments/assets/6a894163-94fd-4726-962d-9d6fce1e4a2e)
 

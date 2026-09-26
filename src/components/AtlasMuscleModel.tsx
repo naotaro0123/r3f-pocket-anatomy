@@ -48,10 +48,10 @@ type GeometryGroup = {
   system: string;
 };
 
-const HIGHLIGHT_COLOR = "#fb7185";
-const HIGHLIGHT_BASE_COLOR = "#fda4af";
-const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
-const DEFAULT_MUSCLE_COLOR = "#a85b50";
+const HIGHLIGHT_COLOR = "#38bdf8";
+const HIGHLIGHT_BASE_COLOR = "#1d4ed8";
+const HIGHLIGHT_EMISSIVE_INTENSITY = 2.2;
+const DEFAULT_MUSCLE_COLOR = "#b85f4b";
 const OTHER_GROUP = "__other";
 const SYSTEM_COLORS: Record<string, string> = {
   arterial: "#c05245",

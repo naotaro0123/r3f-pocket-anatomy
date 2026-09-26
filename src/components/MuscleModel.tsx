@@ -62,9 +62,9 @@ const MODEL_ROTATION: RotationTuple = [
   toRadians(import.meta.env.VITE_MUSCLE_MODEL_ROTATION_Z, 0),
 ];
 const MODEL_SCALE = toNumber(import.meta.env.VITE_MUSCLE_MODEL_SCALE, 0.01);
-const HIGHLIGHT_COLOR = "#fb7185";
-const HIGHLIGHT_BASE_COLOR = "#fda4af";
-const HIGHLIGHT_EMISSIVE_INTENSITY = 1.8;
+const HIGHLIGHT_COLOR = "#38bdf8";
+const HIGHLIGHT_BASE_COLOR = "#1d4ed8";
+const HIGHLIGHT_EMISSIVE_INTENSITY = 2.2;
 
 const createMuscleMaterial = (
   baseMaterial: MeshStandardMaterial,
