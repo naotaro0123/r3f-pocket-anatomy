@@ -1,4 +1,4 @@
-export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
+export const MUSCLE_IDS = [
   "Muscle_Chest", // 大胸筋
   "Muscle_Deltoid", // 三角筋
   "Muscle_Biceps", // 上腕二頭筋
@@ -11,9 +11,14 @@ export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = [
   "Muscle_LatissimusDorsi", // 広背筋
   "Muscle_TricepsBrachii", // 上腕三頭筋
   "Muscle_GluteusMaximus", // 大殿筋
+  "Muscle_Platysma", // 広頸筋
 ] as const;
 
-export type MuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
+export type MuscleId = (typeof MUSCLE_IDS)[number];
+
+export const GLTF_HIGHLIGHTABLE_MUSCLE_IDS = MUSCLE_IDS.filter(
+  (muscleId) => muscleId !== "Muscle_Platysma",
+);
 
 type MuscleDefinition = {
   id: MuscleId;
@@ -41,7 +46,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "さんかくきん",
     description: "肩を包み込む大きな筋で、腕を上げる動きや肩関節の安定化に関わります。",
     color: "#a855f7",
-    labelPosition: [0.4, 3.72, 0.1],
+    labelPosition: [0.4, 3.62, -0.3],
   },
   {
     id: "Muscle_Biceps",
@@ -57,7 +62,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "ぜんわんくっきんぐん",
     description: "前腕の手のひら側にある筋群で、手首や指を曲げる動きに関わります。",
     color: "#06b6d4",
-    labelPosition: [0.82, 2.68, 0.05],
+    labelPosition: [0.62, 2.68, 0.0],
   },
   {
     id: "Muscle_Abs",
@@ -97,7 +102,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "そうぼうきん",
     description: "首から肩、背中上部へ広がる筋で、肩甲骨の挙上・内転や姿勢保持に関わります。",
     color: "#14b8a6",
-    labelPosition: [0, 3.86, -0.46],
+    labelPosition: [0, 3.6, -0.5],
   },
   {
     id: "Muscle_LatissimusDorsi",
@@ -105,7 +110,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "こうはいきん",
     description: "背中の広い面積を占める筋で、腕を引く動きや肩関節の伸展・内転を助けます。",
     color: "#8b5cf6",
-    labelPosition: [0, 3.22, -0.5],
+    labelPosition: [0, 3.0, -0.55],
   },
   {
     id: "Muscle_TricepsBrachii",
@@ -113,7 +118,7 @@ export const MUSCLES: MuscleDefinition[] = [
     reading: "じょうわんさんとうきん",
     description: "上腕後面の大きな筋で、肘を伸ばす動きの主力となります。",
     color: "#f59e0b",
-    labelPosition: [-0.52, 3.2, -0.34],
+    labelPosition: [-0.32, 3.2, -0.48],
   },
   {
     id: "Muscle_GluteusMaximus",
@@ -122,5 +127,14 @@ export const MUSCLES: MuscleDefinition[] = [
     description: "股関節の伸展や外旋に関わる大きな臀部の筋で、立ち上がりや走行時に重要です。",
     color: "#ec4899",
     labelPosition: [0, 2.54, -0.62],
+  },
+  {
+    id: "Muscle_Platysma",
+    name: "広頸筋",
+    reading: "こうけいきん",
+    description:
+      "首の前面から下顎に広がる薄い筋で、首の皮膚を緊張させ、下顎を下げる動きを助けます。",
+    color: "#0ea5e9",
+    labelPosition: [-0.2, 3.65, -0.14],
   },
 ];

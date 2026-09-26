@@ -78,10 +78,11 @@ const CONCEPT_IDS_BY_MUSCLE_ID: Partial<Record<MuscleId, readonly string[]>> = {
   Muscle_Obliques: ["FMA13335"],
   Muscle_Quads: ["FMA22429"],
   Muscle_TibialisAnterior: ["FMA22532"],
-  Muscle_Trapezius: ["FMA32529"],
+  Muscle_Trapezius: ["FMA32555", "FMA32529", "FMA32557"],
   Muscle_LatissimusDorsi: ["FMA13379", "FMA13402", "FMA22702", "FMA22703", "FMA22709"],
   Muscle_TricepsBrachii: ["FMA37692", "FMA37693", "FMA37694"],
   Muscle_GluteusMaximus: ["FMA22314"],
+  Muscle_Platysma: ["FMA45738"],
 };
 const MUSCLE_COLOR_BY_ID = new Map(MUSCLES.map((muscle) => [muscle.id, muscle.color]));
 

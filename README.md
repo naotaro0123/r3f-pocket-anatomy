@@ -14,6 +14,7 @@
 - 非圧縮チャンクは圧縮ストリーム非対応環境向けのフォールバックです
 - データの出典、ライセンス、加工内容は [`public/models/ATTRIBUTION.md`](public/models/ATTRIBUTION.md) を参照してください
 - モデル変換・配信形式は [ashemag/human-atlas](https://github.com/ashemag/human-atlas) を参考にしています
+- 同梱モデルには腹直筋の独立したメッシュが含まれていないため、腹直筋を選択した場合は腹斜筋のメッシュを代替表示します。そのため、腹直筋と腹斜筋のハイライト範囲は同じです
 
 ## 開発
 

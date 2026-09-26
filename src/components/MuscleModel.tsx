@@ -12,6 +12,7 @@ import { SkeletonUtils, type GLTF } from "three-stdlib";
 import { GLTF_HIGHLIGHTABLE_MUSCLE_IDS, type MuscleId } from "../data/muscles";
 import { AtlasMuscleModel } from "./AtlasMuscleModel";
 
+type GltfMuscleId = (typeof GLTF_HIGHLIGHTABLE_MUSCLE_IDS)[number];
 type MuscleModelProps = ThreeElements["group"] & {
   onHighlightMuscle?: (muscleId: MuscleId | null) => void;
   selectedMuscleId?: MuscleId | null;
@@ -23,7 +24,7 @@ type GLTFResult = GLTF & {
     Alpha_Joints: SkinnedMesh;
     Alpha_Surface: SkinnedMesh;
     // 下記のMaterialはAlpha_Body_MATを共有
-  } & Record<MuscleId, SkinnedMesh>;
+  } & Record<GltfMuscleId, SkinnedMesh>;
   materials: {
     Alpha_Joints_MAT: MeshStandardMaterial;
     Alpha_Body_MAT: MeshStandardMaterial;
@@ -109,7 +110,7 @@ const HostedMuscleModel = ({ onHighlightMuscle, selectedMuscleId, ...props }: Mu
           muscleId,
           createMuscleMaterial(materials.Alpha_Body_MAT, muscleId, selectedMuscleId),
         ]),
-      ) as Record<MuscleId, MeshStandardMaterial>,
+      ) as Record<GltfMuscleId, MeshStandardMaterial>,
     };
   }, [materials, selectedMuscleId]);
 
